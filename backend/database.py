@@ -40,7 +40,7 @@ customerDatabase = {
 global numberofCustomers #create numberofCustomers variable
 
 #add_Customer takes the specified values and creates a dictionary from them, it calculates customerId also
-def add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker):
+def add_Customer(firstName : str, lastName : str, dateofBirth : str, address : str, height : str, weight : str, smoker : str):
     numberofCustomers = len(customerDatabase) #get current number of customers
     newCustomer = numberofCustomers + 1       #newCustomer gets the next id value
     customerDatabase[newCustomer] = {
@@ -54,16 +54,21 @@ def add_Customer(firstName, lastName, dateofBirth, address, height, weight, smok
         "smoker" : smoker}
 
 #modify_Value takes the id, category to be changed and change to be made as parameters and applies the change
-def modify_Value( id, category, change):
+def modify_Value( id : int, category : str, change):
     stringId = str(id)                      #change id to a string
     customerDatabase[id][category] = change #change the value by referring to key name
 
+    # category has to be "id", "firstName", "lastName", "dateofBirth", "address", "height", "weight" or "smoker"
+    # but other stuff still works and will add stuff to the table.
+
+
 #delete_Value deletes either the customer's account data or a specific piece of their data(may not be necessary) taking the parameters id and itemforDeletion
-def delete_Value( id, itemforDeletion):
-    if itemforDeletion == "Account" or "account":    # if the itemforDeletion parameter is Account or account, delete all of the customer's data
+def delete_Value( id : int, itemforDeletion : str):
+    # if the itemforDeletion parameter is Account or account, delete all of the customer's data
+    if itemforDeletion.lower() == "account":
         del customerDatabase[id]
     else:
-        id.pop(itemforDeletion)                      # Deletion for individual items does not work as intended, it deletes all data for customer with specified id
+        id.pop(itemforDeletion)
 
 '''   
 add_Customer("Alan", "Johnson", "08/09/2001", "17 Plum lane", 165, 71, "FALSE");
