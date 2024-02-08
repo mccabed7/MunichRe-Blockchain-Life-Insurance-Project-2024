@@ -7,7 +7,7 @@ app = Flask(__name__)
 def main():
   return "hello world!"
 
-# make similar "pages" that handle get, post requests to api.
+# make similar "pages" that handle get, post, etc. requests to api.
 
 
 if __name__ == '__main__':
