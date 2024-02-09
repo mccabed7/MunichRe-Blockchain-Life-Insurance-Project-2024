@@ -20,8 +20,8 @@ customerDatabase = {
         "lastName" : "Part",
         "dateofBirth" : "04/01/1957",
         "address" : "12 Coastal Avenue",
-        "height" : "120",
-        "weight" : "57",
+        "height" : 120,
+        "weight" : 57,
         "smoker" : "FALSE"
         },
     3 : {
@@ -30,8 +30,8 @@ customerDatabase = {
         "lastName" : "Kennedy",
         "dateofBirth" : "17/03/1972",
         "address" : "CoalView House",
-        "height" : "175",
-        "weight" : "85",
+        "height" : 175,
+        "weight" : 85,
         "smoker" : "TRUE"
         }
         
@@ -67,14 +67,35 @@ def delete_Value( id : int, itemforDeletion : str):
     # if the itemforDeletion parameter is Account or account, delete all of the customer's data
     if itemforDeletion.lower() == "account":
         del customerDatabase[id]
+    #else delete specific piece of data
     else:
-        id.pop(itemforDeletion)
+        del customerDatabase[id][itemforDeletion]
 
-'''   
+#access_Value allows for easy access to some or all of a customer's data
+#It takes the customer's id and the item to access as parameters
+def access_Value( id : int, itemtoAccess : str):
+    #if the itemtoAccess parameter is all or All, access all of the specified customer's data
+    if itemtoAccess.lower() == "all":
+        x = customerDatabase[id]
+        return x
+    #else access specific piece of data
+    else:
+        x = customerDatabase[id][itemtoAccess]
+        return x
+        
+'''
 add_Customer("Alan", "Johnson", "08/09/2001", "17 Plum lane", 165, 71, "FALSE");
 modify_Value( 3, "firstName", "Ann")
 delete_Value(4, "Account")
 delete_Value(3, "firstName")
 data = customerDatabase.values()
 print(data)
+a = access_Value(1, "firstName")
+print(a)
+b = access_Value(2, "height")
+print(b)
+c = access_Value(1, "all")
+print(c)
 '''
+
+
