@@ -10,8 +10,8 @@ customerDatabase = {
         "lastName" : "Humphrey",
         "dateofBirth" : "06/07/1995",
         "address" : "2 Oak Avenue",
-        "height" : 150,
-        "weight" : 80,
+        "height" : "150",
+        "weight" : "80",
         "smoker" : "TRUE"
         },
     2 : {
@@ -20,8 +20,8 @@ customerDatabase = {
         "lastName" : "Part",
         "dateofBirth" : "04/01/1957",
         "address" : "12 Coastal Avenue",
-        "height" : 120,
-        "weight" : 57,
+        "height" : "120",
+        "weight" : "57",
         "smoker" : "FALSE"
         },
     3 : {
@@ -30,8 +30,8 @@ customerDatabase = {
         "lastName" : "Kennedy",
         "dateofBirth" : "17/03/1972",
         "address" : "CoalView House",
-        "height" : 175,
-        "weight" : 85,
+        "height" : "175",
+        "weight" : "85",
         "smoker" : "TRUE"
         }
         
