@@ -1,0 +1,19 @@
+name: Frontend Test: On Pull Requests
+
+on: 
+  pull_request
+
+jobs:
+  test_pull_request:
+    runs: windows-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 20.11.0
+    - name: download npm
+      run: npm ci
+    - name: verifying build
+      run: npm run build
