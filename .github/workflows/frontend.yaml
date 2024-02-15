@@ -15,5 +15,7 @@ jobs:
         node-version: 20.11.0
     - name: download npm
       run: cd frontend && npm ci
+      env:
+        CI: false
     - name: verifying build
       run: cd frontend && npm run build
