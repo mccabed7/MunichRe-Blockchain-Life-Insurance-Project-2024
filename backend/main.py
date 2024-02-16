@@ -25,30 +25,28 @@ def customers_Request():
         weight = newCustomer.get("weight", "")
         smoker = newCustomer.get("smoker", "")
         add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
-        return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase) - 1]})
+        return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase) - 1]}), 201
 
 @app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST', 'PATCH'])
 def customer_Item_Request(id, itemtoAccess):
+  if id in customerDatabase:
     if request.method == 'GET':
-      if id in customerDatabase:
-        if itemtoAccess in customerDatabase[id] or itemtoAccess.lower() == 'all' :
-          print("Accessing values")
-          return access_Value(id, itemtoAccess), 200
-        else:
-          return {'error' : 'item not found'}, 404
+      if itemtoAccess in customerDatabase[id] or itemtoAccess.lower() == 'all' :
+        return access_Value(id, itemtoAccess), 200
       else:
-        return {'error' : 'id not found'}, 404
+        return {'error' : 'item not found'}, 404   
     elif request.method == 'POST':
        newItem = request.get_json()
        itemtoAdd = newItem.get(itemtoAccess, "")
        modify_Value(id, itemtoAccess, itemtoAdd)
-       return jsonify(customerDatabase[id])
+       return jsonify(customerDatabase[id]), 201
     elif request.method == 'PATCH':
        changeItem = request.get_json()
        newValue = changeItem.get(itemtoAccess, "")
        modify_Value(id, itemtoAccess, newValue)
-       return jsonify(customerDatabase[id])
-
+       return jsonify(customerDatabase[id]), 200
+  else:
+        return {'error' : 'id not found'}, 404
 
 if __name__ == '__main__':
   app.run()
