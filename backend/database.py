@@ -52,6 +52,7 @@ def add_Customer(firstName : str, lastName : str, dateofBirth : str, address : s
         "height" : height,
         "weight" : weight,
         "smoker" : smoker}
+    return customerDatabase[newCustomer]
 
 
 #modify_Value takes the id, category to be changed and change to be made as parameters and applies the change
