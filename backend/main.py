@@ -27,7 +27,7 @@ def customers_Request():
         add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
         return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase) - 1]}), 201
 
-@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST', 'PATCH'])
+@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST'])
 def customer_Item_Request(id, itemtoAccess):
   if id in customerDatabase:
     if request.method == 'GET':
@@ -40,13 +40,19 @@ def customer_Item_Request(id, itemtoAccess):
        itemtoAdd = newItem.get(itemtoAccess, "")
        modify_Value(id, itemtoAccess, itemtoAdd)
        return jsonify(customerDatabase[id]), 201
-    elif request.method == 'PATCH':
-       changeItem = request.get_json()
-       newValue = changeItem.get(itemtoAccess, "")
-       modify_Value(id, itemtoAccess, newValue)
-       return jsonify(customerDatabase[id]), 200
   else:
         return {'error' : 'id not found'}, 404
+  
+@app.route('/customers/<int:id>/update', methods=['PATCH'])
+def update_Customer(id):
+  if id in customerDatabase:
+    updatedValues = request.get_json()
+    for key, value in updatedValues.items():
+      customerDatabase[id][key] = value
+    return jsonify(customerDatabase[id])
+  else:
+    return {'error' : 'id not found'}, 404
+     
 
 if __name__ == '__main__':
   app.run()
