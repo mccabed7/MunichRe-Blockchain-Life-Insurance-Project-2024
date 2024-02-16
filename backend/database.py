@@ -53,6 +53,7 @@ def add_Customer(firstName : str, lastName : str, dateofBirth : str, address : s
         "weight" : weight,
         "smoker" : smoker}
 
+
 #modify_Value takes the id, category to be changed and change to be made as parameters and applies the change
 def modify_Value( id : int, category : str, change):
     stringId = str(id)                      #change id to a string

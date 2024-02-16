@@ -27,16 +27,22 @@ def customers_Request():
         add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
         return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase) - 1]})
 
-@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET'])
-def get_Customer(id, itemtoAccess):
-    if id in customerDatabase:
-      if itemtoAccess in customerDatabase[id] or itemtoAccess.lower() == 'all' :
-        print("Accessing values")
-        return access_Value(id, itemtoAccess), 200
+@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST'])
+def customer_Item_Request(id, itemtoAccess):
+    if request.method == 'GET':
+      if id in customerDatabase:
+        if itemtoAccess in customerDatabase[id] or itemtoAccess.lower() == 'all' :
+          print("Accessing values")
+          return access_Value(id, itemtoAccess), 200
+        else:
+          return {'error' : 'item not found'}, 404
       else:
-        return {'error' : 'item not found'}, 404
-    else:
-      return {'error' : 'id not found'}, 404
+        return {'error' : 'id not found'}, 404
+    elif request.method == 'POST':
+       newItem = request.get_json()
+       itemtoAdd = newItem.get(itemtoAccess, "")
+       modify_Value(id, itemtoAccess, itemtoAdd)
+       return jsonify(customerDatabase[id])
  
                  
 if __name__ == '__main__':
