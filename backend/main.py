@@ -25,7 +25,7 @@ def customers_Request():
         weight = newCustomer.get("weight", "")
         smoker = newCustomer.get("smoker", "")
         add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
-        return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase) - 1]}), 201
+        return jsonify({len(customerDatabase) : customerDatabase[len(customerDatabase)]}), 201
 
 @app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST'])
 def customer_Item_Request(id, itemtoAccess):
