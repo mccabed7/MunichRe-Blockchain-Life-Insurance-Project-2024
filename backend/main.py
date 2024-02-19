@@ -25,8 +25,9 @@ def customers_Request():
         weight = newCustomer.get("weight", "")
         smoker = newCustomer.get("smoker", "")
         return jsonify(add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)), 201
+    
 
-@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST'])
+@app.route('/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'POST', 'DELETE'])
 def customer_Item_Request(id, itemtoAccess):
   if id in customerDatabase:
     if request.method == 'GET':
@@ -39,6 +40,12 @@ def customer_Item_Request(id, itemtoAccess):
        itemtoAdd = newItem.get(itemtoAccess, "")
        modify_Value(id, itemtoAccess, itemtoAdd)
        return jsonify(customerDatabase[id]), 201
+    elif request.method == 'DELETE':
+      if itemtoAccess in customerDatabase[id] or itemtoAccess.lower() == 'all':
+        delete_Value(id, itemtoAccess)
+        return jsonify({"":""}), 204
+      else:
+        return jsonify({'message': 'item not found'}), 404
   else:
         return {'error' : 'id not found'}, 404
   
