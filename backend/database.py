@@ -66,8 +66,8 @@ def modify_Value( id : int, category : str, change):
 
 #delete_Value deletes either the customer's account data or a specific piece of their data(may not be necessary) taking the parameters id and itemforDeletion
 def delete_Value( id : int, itemforDeletion : str):
-    # if the itemforDeletion parameter is Account or account, delete all of the customer's data
-    if itemforDeletion.lower() == "account":
+    # if the itemforDeletion parameter is All or all, delete all of the customer's data
+    if itemforDeletion.lower() == "all":
         del customerDatabase[id]
     #else delete specific piece of data
     else:
