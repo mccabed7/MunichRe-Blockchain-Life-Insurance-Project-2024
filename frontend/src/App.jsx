@@ -1,4 +1,5 @@
 import Registration from "./Registration";
+import Login from "./Login";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 function App() {
@@ -6,7 +7,6 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Registration/>} />
-
             </Routes>
         </Router>
         
