@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* footerBox Component */
+footerBox {
+    font-family: Poppins, sans-serif;
+    display: flex;
+    padding-top: 3.5%;
+    padding-bottom: 3.5%;
+    padding-right: 1.5%;
+    background: #6030a8;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* column Component */
+column {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 320px;
+    width: 800px;
+}
+
+/* row Component */
+row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-gap: 90px;
+}
+
+/* footerLink Component */
+footerLink {
+    font-family: Poppins, sans-serif;
+    color: #fff;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 180px;
+    font-size: 25px;
+    text-decoration: none;
+}
+
+footerLink:hover {
+    color: #3484b9;
+    transition: 200ms ease-in;
+}
+
+
