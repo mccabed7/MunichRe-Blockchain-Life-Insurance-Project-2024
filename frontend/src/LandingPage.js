@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import computer from "./img/computer.png";
 import moonIcon from "./img/moon.png";
@@ -37,7 +38,7 @@ function LandingPage() {
               <li><a href="#">About Us</a></li>
               <li><a href="#">How It Works</a></li>
               <li><a href="#">Contact Us</a></li>
-              <li><a href="#" className="btn">Register</a></li>
+              <li><Link to="/registration"><a href="#" className="btn">Register</a></Link></li>
             </ul>
           </div>
         </div>
