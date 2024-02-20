@@ -1,10 +1,16 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React from 'react';
+import './Sidebar.css'
 
+const Sidebar = ({ items, onSidebarClick}) => {
+  return (
+    <div className="sidebar">
+      <ul>
+        {items.map((item, index) => (
+          <li key={index} onClick={() => onSidebarClick(item)}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-function Sidebar({url}){
-    return(
-        <div className="sidebar">
-            
-        </div>
-    )
-}
+export default Sidebar;
