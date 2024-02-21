@@ -1,77 +1,78 @@
-pragma solidity ^0.8.0;
-//this doesnt quite work more of a placeholder
-// Import necessary libraries and interfaces
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+// SPDX-License-Identifier: Sweng-23
+pragma solidity ^0.8.13;
 
-contract subscription is Ownable {
-     
-    using SafeMath for uint256;
 
-    IERC20 public token;
-
-    struct User {
-        address user;
-        uint8 subType;
-        uint256 termStart;
-        uint256 nextPayment;
-        uint256 riskProfile;
+contract Subscription{
+    struct Subscriber {
+        uint256 subscriptionId;
+        address subscriberAddress;
+        uint256 startedAt;
+        uint256 expiresAt;
     }
 
-    mapping(address => User) public users;
+    mapping(address => Subscriber) internal _subscribers;
+    uint256 private _currentSubscriptionId = 0; // Counter for unique subscription IDs
+    address private _owner; // Owner address for potential withdrawal function
 
-    uint256 public MONTH_PRICE = 15 * 10**6;
-    uint256 public YEAR_PRICE = 150 * 10**6;
+    // Events
+    event SubscriptionStarted(address indexed subscriber, uint256 subscriptionId, uint256 startDate, uint256 expiryDate);
+    event SubscriptionRenewed(address indexed subscriber, uint256 expiryDate);
+    event SubscriptionCancelled(address indexed subscriber);
 
-    uint256 public subscriptions;
-
-    // Events...
-    event Subscription(address indexed user, uint8 subType, uint256 termStart, uint256 nextPayment, riskProfile);
-
-    // Constructor...
-    constructor(address _tokenAddress) {
-        token = IERC20(_tokenAddress);
+    constructor() {
+        _owner = msg.sender;
     }
 
-    function subscribe(uint8 tokenId) external  {
-        uint256 amountPaid;
-        uint256 nextPayment;
+    modifier onlyOwner() {
+        require(msg.sender == _owner, "Only the owner can call this function");
+        _;
+    }
 
-        if (tokenId == 1) {
-            amountPaid = MONTH_PRICE;
-            nextPayment = block.timestamp + (30 days);
-        } else if (tokenId == 2) {
-            amountPaid = YEAR_PRICE;
-            nextPayment = block.timestamp + (365 days);
-        } else {
-            revert("Invalid tokenId input");
-        }
+    function getSubscription() external payable{
+        require(msg.value == 0.01 ether, "Subscription: InvalidAmount");
+        require(_subscribers[msg.sender].subscriberAddress != msg.sender || _subscribers[msg.sender].expiresAt < block.timestamp, "Subscription: AlreadyExistsOrRenew");
 
-        require(token.balanceOf(msg.sender) >= amountPaid, "Insufficient funds");
+        _currentSubscriptionId++; // Increment the ID for a new subscription
 
-        subscriptions++;
-
-        users[msg.sender] = User(
+        _subscribers[msg.sender] = Subscriber(
+            _currentSubscriptionId,
             msg.sender,
-            tokenId,
             block.timestamp,
-            nextPayment,
-            0
-             );
+            block.timestamp + 30 days
+        );
 
-        emit Subscription(msg.sender, tokenId, block.timestamp, nextPayment, riskProfile);
-
-        token.transferFrom(msg.sender, owner(), amountPaid);
+        emit SubscriptionStarted(msg.sender, _currentSubscriptionId, block.timestamp, block.timestamp + 30 days);
     }
 
-    function checkStatus(address _addr) external view returns (bool) {
-        // Implement status checking logic...
-        return true;
+    function renewSubscription(uint256 subscriptionId) external payable {
+        require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
+        require(_subscribers[msg.sender].expiresAt < block.timestamp, "Subscription: SubscriptionNotExpired");
+        require(msg.value == 0.01 ether, "Subscription: InvalidAmount");
+        require(_subscribers[msg.sender].subscriptionId == subscriptionId, "Subscription: InvalidSubscriptionId");
+
+        _subscribers[msg.sender].expiresAt = block.timestamp + 30 days;
+
+        emit SubscriptionRenewed(msg.sender, block.timestamp + 30 days);
     }
 
-    function payBill(address _addr) external {
-        // Implement bill payment logic...
+    function cancelSubscription(uint256 subscriptionId) external{
+        require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
+        require(_subscribers[msg.sender].subscriptionId == subscriptionId, "Subscription: InvalidSubscriptionId");
+
+        delete _subscribers[msg.sender];
+
+        emit SubscriptionCancelled(msg.sender);
     }
 
+    function subscriptionData(address subscriber) external view returns (Subscriber memory) {
+        return _subscribers[subscriber];
+    }
+
+    function isSubscribed(address subscriber) external view  returns (bool) {
+        return (_subscribers[subscriber].subscriberAddress == subscriber && _subscribers[subscriber].expiresAt > block.timestamp);
+    }
+
+    function withdraw() external onlyOwner {
+        payable(_owner).transfer(address(this).balance);
+    }
 }
