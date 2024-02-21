@@ -23,6 +23,7 @@ function LandingPage() {
   }, [darkMode]);
 
   return (
+  <div className='home'>
     <div className={`big-wrapper ${darkMode ? 'dark' : 'light'}`}>
       <img src="./img/shape.png" alt="" className="shape" />
       <img src="./img/shape.png" alt="" className="shape2" />
@@ -79,6 +80,7 @@ function LandingPage() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
 
