@@ -57,6 +57,7 @@ footerLink {
     color: #fff;
     font-size: 150%;
     text-decoration: none;
+
     padding-left: 20%;
 
 
@@ -77,6 +78,10 @@ footerLink {
 footerLink:hover {
     color: #3484b9;
     transition: 200ms ease-in;
+}
+
+a:link{
+    text-decoration: none;
 }
 
 

@@ -3,6 +3,10 @@ import Registration from "./Registration";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
 import LandingPage from "./LandingPage";
+import AboutUs from "./AboutUs";
+import HowItWorks from "./HowItWorks";
+import ContactUs from "./ContactUs";
+
 
 function App() {
     return (
@@ -10,7 +14,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<LandingPage/>} />
                 <Route path="/registration" element={<Registration/>} />
-                <Route path="/dashboard" element={<Dashboard/>} />
+                <Route path="/dashboard" element={<Dashboard/>} />  
+                <Route path="/aboutus" element={<AboutUs/>} />    
+                <Route path="/howitworks" element={<HowItWorks/>} /> 
+                <Route path="/contactus" element={<ContactUs/>} />
             </Routes>
             <Footer/>
         </Router>

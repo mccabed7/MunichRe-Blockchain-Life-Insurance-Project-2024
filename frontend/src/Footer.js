@@ -12,20 +12,36 @@ const Footer = () => {
                         </heading>
                     </column>
                     <column>
-                        <footerLink>
-                            About us
-                        </footerLink>
-                        <footerLink>
-                            How it works
-                        </footerLink>
+                        <Link to= '/aboutus'>
+                            <a href='#'>
+                                <footerLink>
+                                    About us
+                                </footerLink>
+                            </a>
+                        </Link>
+                        <Link to= '/howitworks'>
+                            <a href='#'>
+                                <footerLink>
+                                    How it works
+                                </footerLink>
+                             </a>
+                        </Link>
                     </column>
                     <column>
-                        <footerLink>
-                            Contact Us
-                        </footerLink>
-                        <footerLink>
-                            Login/Register
-                        </footerLink>
+                        <Link to= '/contactus'>
+                            <a href='#'>
+                                <footerLink>
+                                    Contact us
+                                </footerLink>
+                            </a>
+                        </Link>
+                        <Link to= '/registration'>
+                            <a href='#'>
+                                <footerLink>
+                                    Login/Register
+                                </footerLink>
+                            </a>
+                        </Link>
                     </column>
                 </row>
             </footerBox>
