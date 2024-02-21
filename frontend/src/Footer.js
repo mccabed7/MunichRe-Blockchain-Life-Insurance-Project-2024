@@ -1,28 +1,16 @@
 import React from "react";
+import "./Footer.css";
 import { Link } from "react-router-dom";
-import {
-    footerBox,
-    row,
-    column,
-    footerLink,
-} from "./Footer.css";
 
 const Footer = () => {
     return (
             <footerBox>
                 <row>
-                    <h1
-                        style={{
-                                   color: "white",
-                                   textAlign: "left",
-                                   marginTop: "10px",
-                                   marginLeft: "320px",
-                                   fontSize: "45px",
-                                   fontWeight: "bold"
-                                 }}
-                        >
-                        BlockchainAssure
-                    </h1>
+                    <column>
+                        <heading>
+                            SmartAssurance
+                        </heading>
+                    </column>
                     <column>
                         <footerLink>
                             About us
