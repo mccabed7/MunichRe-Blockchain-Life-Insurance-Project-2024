@@ -1,6 +1,8 @@
 import "./Registration.css";
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import RegistrationInput from "./RegistrationInput";
+import { useNavigate } from 'react-router-dom';
 
 
 const Registration = () => {
@@ -119,7 +121,7 @@ const RegisterForm = () => {
                         onChange={onChange}
                     />
                 ))}
-                <button>Register</button>
+                <Link to="/dashboard"><button>Register</button></Link>
             </form>
         </div>
     );
@@ -177,7 +179,7 @@ const LoginForm = () => {
             placeholder: "Password",
             errorMessage: "Password must be at least 8 characters, and contain at least one uppercase letter and one special character",
             label: "Password",
-            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+            //pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             required: true
         },
         {
@@ -192,9 +194,24 @@ const LoginForm = () => {
         }
     ];
 
+    const navigate = useNavigate();
+
+    const isFormValid = () => {
+        const hasPassword = (values.password != null);
+        const hasEmail = (values.email != null);
+        return hasPassword && hasEmail;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-    }
+        if (isFormValid()) {
+            //WE ARE GONNA HAVE A METHOD IN HERE FOR SUBMITTING TO API AND CHECKING IF VALID!!!
+            navigate('/dashboard');
+        } else {
+            
+            alert('Invalid form data. Please check your inputs.');
+        }
+    };
 
     const onChange = (e) => {
         setValues({...values, [e.target.name]: e.target.value});
