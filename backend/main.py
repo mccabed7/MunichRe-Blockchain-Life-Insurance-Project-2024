@@ -52,17 +52,22 @@ def update_Customer(id):
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
 
-@app.route('/api/<string:emailAddress>/login', methods=['POST', 'GET'])
-def login_to_Account(emailAddress):
+@app.route('/api/login', methods=['POST', 'GET'])
+def login_to_Account():
+  arguments = request.args
+  emailAddress = arguments.get("emailAddress", "")
+  #for POST request, url must be /api/login?emailAddress=x
+  #where x is email address to be used to sign up
   if request.method == 'POST':
     if emailAddress not in Users:
       signupDetails = request.get_json()
-      return jsonify(add_Details(emailAddress, signupDetails)), 200
-  #for get request, url must be /api/emailAddress/login?password=x
-  #where email is email address and x is password used to sign in  
+      return jsonify(add_Details(emailAddress, signupDetails)), 201
+    else:
+      return {'error' : 'Email Address already in use'}, 401
+  #for GET request, url must be /api/login?emailAddress=x&password=y
+  #where x is email address and y is password used to sign in  
   elif request.method == 'GET':     
     if emailAddress in Users:
-      arguments = request.args
       password = arguments.get("password", "")
       result = attempt_Login(emailAddress, password)
       if result == None:
