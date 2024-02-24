@@ -52,19 +52,26 @@ def update_Customer(id):
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
 
-@app.route('/api/<string:emailAddress>/login', methods=['POST'])
+@app.route('/api/<string:emailAddress>/login', methods=['POST', 'GET'])
 def login_to_Account(emailAddress):
-  if emailAddress in loginDatabase:
-    loginDetails = request.get_json()
-    result = attempt_Login(emailAddress, loginDetails)
-    if result == None:
-      return {'error' : 'Your password is incorrect'}, 400
+  if request.method == 'POST':
+    if emailAddress not in Users:
+      signupDetails = request.get_json()
+      return jsonify(add_Details(emailAddress, signupDetails)), 200
+  #for get request, url must be /api/emailAddress/login?password=x
+  #where email is email address and x is password used to sign in  
+  elif request.method == 'GET':     
+    if emailAddress in Users:
+      arguments = request.args
+      password = arguments.get("password", "")
+      result = attempt_Login(emailAddress, password)
+      if result == None:
+        return {'error' : 'Your password is incorrect'}, 400
+      else:
+        return jsonify(add_Session_id(emailAddress)), 200    #Placeholder, unsure of what to do upon success
     else:
-      add_Session_id(emailAddress)
-      return jsonify("Success"), 200    #Placeholder, unsure of what to do upon success
-  else:
-    return {'error' : 'invalid email address'}, 400
-
+      return {'error' : 'invalid email address'}, 400
+  
 
 if __name__ == '__main__':
   app.run()
