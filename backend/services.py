@@ -2,6 +2,7 @@
 # it will also call many helper functions in those files
 from database import *
 from login import *
+from sessionId import *
 # it will be used by main.py
 
 # there should be at least one function for each interactive API endpoint

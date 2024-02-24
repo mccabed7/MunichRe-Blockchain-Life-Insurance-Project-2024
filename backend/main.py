@@ -60,6 +60,7 @@ def login_to_Account(emailAddress):
     if result == None:
       return {'error' : 'Your password is incorrect'}, 400
     else:
+      add_Session_id(emailAddress)
       return jsonify("Success"), 200    #Placeholder, unsure of what to do upon success
   else:
     return {'error' : 'invalid email address'}, 400

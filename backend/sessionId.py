@@ -12,3 +12,7 @@ def generate_Session_id():
         generate_Session_id()
     else:
         return sessionId
+
+def add_Session_id(emailAddress):
+    session = generate_Session_id()
+    session_Id_Database[session] = {"email address" : emailAddress}
