@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: Sweng-23
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: UNDEFINED
+pragma solidity ^0.8.18;
 
 
 contract Subscription{
@@ -8,6 +8,11 @@ contract Subscription{
         address subscriberAddress;
         uint256 startedAt;
         uint256 expiresAt;
+        bool isSmoker;
+        uint256[] riskAssessments;
+        uint256 payout;
+        uint256 age;
+        uint256 premium;
     }
 
     mapping(address => Subscriber) internal _subscribers;
@@ -28,27 +33,41 @@ contract Subscription{
         _;
     }
 
-    function getSubscription() external payable{
+    function createSubscription(bool smokingStatus,uint256 age, uint256 payoutValue) external payable{
         require(msg.value == 0.01 ether, "Subscription: InvalidAmount");
-        require(_subscribers[msg.sender].subscriberAddress != msg.sender || _subscribers[msg.sender].expiresAt < block.timestamp, "Subscription: AlreadyExistsOrRenew");
+        require(_subscribers[msg.sender].subscriberAddress != msg.sender || _subscribers[msg.sender].expiresAt < block.timestamp, "Subscription: Already Exists Or Renew");
 
         _currentSubscriptionId++; // Increment the ID for a new subscription
 
-        _subscribers[msg.sender] = Subscriber(
-            _currentSubscriptionId,
-            msg.sender,
-            block.timestamp,
-            block.timestamp + 30 days
-        );
+        _subscribers[msg.sender] = Subscriber({
+            subscriptionId: _currentSubscriptionId,
+            subscriberAddress: msg.sender,
+            startedAt: block.timestamp,
+            expiresAt: block.timestamp + 30 days, 
+            riskAssessments: new uint256[](0),
+            isSmoker: smokingStatus,
+            payout: payoutValue,
+            age : age,
+            premium: 0
+    });
 
         emit SubscriptionStarted(msg.sender, _currentSubscriptionId, block.timestamp, block.timestamp + 30 days);
     }
+    function updateRisk(address subscriberAddress) external{
+        require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
+        //stored in wei as floats do not work in solidity
+        uint256 amount = (100000000000000000 *_subscribers[subscriberAddress].age)/2 * (_subscribers[subscriberAddress].isSmoker? 3:1);
+        _subscribers[subscriberAddress].premium = amount;
+        _subscribers[subscriberAddress].riskAssessments.push(amount/100000000000000);
+    }
+    
 
     function renewSubscription(uint256 subscriptionId) external payable {
         require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
         require(_subscribers[msg.sender].expiresAt < block.timestamp, "Subscription: SubscriptionNotExpired");
-        require(msg.value == 0.01 ether, "Subscription: InvalidAmount");
         require(_subscribers[msg.sender].subscriptionId == subscriptionId, "Subscription: InvalidSubscriptionId");
+        require(msg.value == 0.01 ether, "Subscription: InvalidAmount");
+        
 
         _subscribers[msg.sender].expiresAt = block.timestamp + 30 days;
 
@@ -70,6 +89,10 @@ contract Subscription{
 
     function isSubscribed(address subscriber) external view  returns (bool) {
         return (_subscribers[subscriber].subscriberAddress == subscriber && _subscribers[subscriber].expiresAt > block.timestamp);
+    }
+    function subscriberPremium(address subscriber) external view returns(uint256){
+        require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
+        return _subscribers[subscriber].premium;
     }
 
     function withdraw() external onlyOwner {
