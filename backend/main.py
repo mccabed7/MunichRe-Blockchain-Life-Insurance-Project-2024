@@ -51,7 +51,19 @@ def update_Customer(id):
     return jsonify(update_customer(id, updatedValues)), 200   # return customer's data along with status 200(OK)
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
-     
+
+@app.route('/api/<string:emailAddress>/login', methods=['POST'])
+def login_to_Account(emailAddress):
+  if emailAddress in loginDatabase:
+    loginDetails = request.get_json()
+    result = attempt_Login(emailAddress, loginDetails)
+    if result == None:
+      return {'error' : 'Your password is incorrect'}, 400
+    else:
+      return jsonify("Success"), 200    #Placeholder, unsure of what to do upon success
+  else:
+    return {'error' : 'invalid email address'}, 400
+
 
 if __name__ == '__main__':
   app.run()
