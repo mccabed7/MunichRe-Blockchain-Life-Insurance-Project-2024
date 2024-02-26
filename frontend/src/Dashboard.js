@@ -18,7 +18,7 @@ function Dashboard(){
     return(
         <div className='dashboard' style={{ display: 'flex', color: 'white' }}>
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
-            <div style={{marginLeft: '20px', marginTop: '20px', marginRight: '20px', padding: '20px' }}>
+            <div className='dashboard-panel'>
                 {currentPage === 'Summary' && <div>Summaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</div>}
                 {currentPage === 'Risk Timeline' && <Timeline/>}
                 {currentPage === 'Your Premium' && <div>ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>}
