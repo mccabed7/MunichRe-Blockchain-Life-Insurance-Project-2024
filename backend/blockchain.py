@@ -27,6 +27,24 @@ def check_connection():
   else:
       print("Connection Failed")
   
+def get_contract_abi():
+  # URL for the Etherscan API endpoint to get contract ABI
+  etherscan_url = f"https://api.etherscan.io/api?module=contract&action=getabi&address={CONTRACT_ADDRESS}&apikey={ETHERSCAN_API_KEY}"
+
+  # Make an API request to Etherscan
+  response = requests.get(etherscan_url)
+
+  # Parse the response JSON
+  data = response.json()
+
+  # Check if the request was successful
+  if data['status'] == '1' and data['message'] == 'OK':
+      # ABI is returned as a JSON-encoded string, so we need to parse it
+      contract_abi = json.loads(data['result'])
+      print("Contract ABI:")
+      print(json.dumps(contract_abi, indent=2))
+  else:
+      print("Error fetching contract ABI:", data['result'])
 def example():
    # Initialize address nonce
   nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
