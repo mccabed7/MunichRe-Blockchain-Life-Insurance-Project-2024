@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify # may require you to run `pip install flask` on your machine
+from flask_cors import CORS, cross_origin # `pip install -U flask-cors`
 import requests
 from database import *
 from database import customerDatabase
 from services import *
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # home page of backend
 @app.route("/")
