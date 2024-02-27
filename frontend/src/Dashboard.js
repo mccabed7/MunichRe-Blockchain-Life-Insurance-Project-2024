@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Routes, useMatch } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import Timeline from './Timeline';
+import TimelinePanel from './TimelinePanel';
 import './Dashboard.css';
 
 
@@ -20,7 +20,7 @@ function Dashboard(){
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
             <div className='dashboard-panel'>
                 {currentPage === 'Summary' && <div>Summaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</div>}
-                {currentPage === 'Risk Timeline' && <Timeline/>}
+                {currentPage === 'Risk Timeline' && <TimelinePanel/>}
                 {currentPage === 'Your Premium' && <div>ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>}
                 {currentPage === 'Submit Info' && <div>IIIIIIIIIIIIIFJISDJF:I:JSIOEJIOSJDGOHSOIGJSIORHGOISFJ</div>}
             </div>
