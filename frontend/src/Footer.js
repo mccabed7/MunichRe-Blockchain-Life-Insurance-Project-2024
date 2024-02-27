@@ -1,43 +1,47 @@
 import React from "react";
+import "./Footer.css";
 import { Link } from "react-router-dom";
-import {
-    footerBox,
-    row,
-    column,
-    footerLink,
-} from "./Footer.css";
 
 const Footer = () => {
     return (
             <footerBox>
                 <row>
-                    <h1
-                        style={{
-                                   color: "white",
-                                   textAlign: "left",
-                                   marginTop: "10px",
-                                   marginLeft: "320px",
-                                   fontSize: "45px",
-                                   fontWeight: "bold"
-                                 }}
-                        >
-                        BlockchainAssure
-                    </h1>
                     <column>
-                        <footerLink>
-                            About us
-                        </footerLink>
-                        <footerLink>
-                            How it works
-                        </footerLink>
+                        <heading>
+                            SmartAssurance
+                        </heading>
                     </column>
                     <column>
-                        <footerLink>
-                            Contact Us
-                        </footerLink>
-                        <footerLink>
-                            Login/Register
-                        </footerLink>
+                        <Link to= '/aboutus'>
+                            <a href='#'>
+                                <footerLink>
+                                    About us
+                                </footerLink>
+                            </a>
+                        </Link>
+                        <Link to= '/howitworks'>
+                            <a href='#'>
+                                <footerLink>
+                                    How it works
+                                </footerLink>
+                             </a>
+                        </Link>
+                    </column>
+                    <column>
+                        <Link to= '/contactus'>
+                            <a href='#'>
+                                <footerLink>
+                                    Contact us
+                                </footerLink>
+                            </a>
+                        </Link>
+                        <Link to= '/registration'>
+                            <a href='#'>
+                                <footerLink>
+                                    Login/Register
+                                </footerLink>
+                            </a>
+                        </Link>
                     </column>
                 </row>
             </footerBox>

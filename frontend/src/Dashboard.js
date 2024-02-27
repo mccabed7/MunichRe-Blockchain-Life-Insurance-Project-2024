@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Routes, useMatch } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import TimelinePanel from './TimelinePanel';
 import './Dashboard.css';
 
 
@@ -17,9 +18,9 @@ function Dashboard(){
     return(
         <div className='dashboard' style={{ display: 'flex', color: 'white' }}>
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
-            <div style={{marginLeft: '250px', marginTop: '20px', marginRight: '20px', padding: '20px' }}>
+            <div className='dashboard-panel'>
                 {currentPage === 'Summary' && <div>Summaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</div>}
-                {currentPage === 'Risk Timeline' && <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>}
+                {currentPage === 'Risk Timeline' && <TimelinePanel/>}
                 {currentPage === 'Your Premium' && <div>ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>}
                 {currentPage === 'Submit Info' && <div>IIIIIIIIIIIIIFJISDJF:I:JSIOEJIOSJDGOHSOIGJSIORHGOISFJ</div>}
             </div>
