@@ -3,7 +3,8 @@
 
 .sidebar {
     width: 250px;
-    position: fixed;
+    height: 100vh;
+    /* position: fixed; */
     left: 0;
     top: 0;
     bottom: 0;

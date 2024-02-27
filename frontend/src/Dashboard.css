@@ -7,7 +7,12 @@
   
   .dashboard-panel {
     flex-grow: 1;
-    background-color: purple; /* Just an example color */
+    width: 100vh;
+    marginLeft: '20px';
+    marginTop: '20px';
+    marginRight: '20px';
+    padding: '20px';
+    background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(66,35,152,1) 47%, rgba(143,109,205,1) 83%);
     padding: 20px;
     overflow-y: auto;
   }

@@ -163,6 +163,7 @@ header .container {
 }
 
 .big-title {
+  text-shadow: 1px 1px 1px rgba(48, 0, 100, 0.6);
   text-align: left;
   font-size: 1.6rem;
   color: var(--mainColor);
@@ -243,7 +244,7 @@ header .container {
   position: absolute;
   z-index: -5;
   width: 800px;
-  top: -220px;
+  top: -100px;
   right: -100px;
   opacity: 0.40;
 }

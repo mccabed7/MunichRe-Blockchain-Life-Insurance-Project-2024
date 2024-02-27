@@ -6,6 +6,7 @@ import LandingPage from "./LandingPage";
 import AboutUs from "./AboutUs";
 import HowItWorks from "./HowItWorks";
 import ContactUs from "./ContactUs";
+import SummaryPage from "./SummaryPage";
 
 
 function App() {
