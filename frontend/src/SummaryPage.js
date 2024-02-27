@@ -7,7 +7,7 @@ const SummaryPage = () => {
   // Hardcoded user information, premium, and risk assessment
   const userInfo = {
     name: "John Doe",
-    address: "123 Main St, Anytown, USA",
+    address: "123 Main St, Naas, Kildare",
     dob: "01/01/1980"
   };
   const premium = "€200/month";

@@ -16,16 +16,15 @@ body {
   display: flex;
   justify-content: center; /* Horizontally center content */
   align-items: center; /* Vertically center content */
-  background-color: rgba(255, 255, 255, 0.8); /* Low opacity white overlay */
+  background-color: rgb(255, 255, 255); /* Low opacity white overlay */
 }
 
 .summary-container {
   box-shadow: 10px 10px 10px rgba(48, 0, 100, 0.6);
-  opacity: 75%;
   align-self: center;
-  background-color: #fff; /* White background color for the content box */
+  background-color: rgb(145, 160, 236); /* White background color for the content box */
   padding: 40px;
-  margin-left: 275px;
+  margin-left: 30px;
   margin-top: 30px;
   margin-bottom: 30px;
   border-radius: 40px;
@@ -37,6 +36,7 @@ body {
 .personal-info {
   font-family: "Outfit", Outfit;
   margin-bottom: 40px;
+  text-shadow: 1px 1px 1px rgba(72, 72, 72, 0.6);
 }
 
 .premium-box,
@@ -47,8 +47,7 @@ body {
 
 .premium-box,
 .risk-assessment-box {
-  opacity: 95%;
-  background-color: #bcbcbc;
+  background-color: #231445;
   padding: 20px;
   border-radius: 10px;
 }
