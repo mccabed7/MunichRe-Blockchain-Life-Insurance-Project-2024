@@ -19,7 +19,7 @@ function Dashboard(){
         <div className='dashboard' style={{ display: 'flex', color: 'white' }}>
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
             <div className='dashboard-panel'>
-                {currentPage === 'Summary' && <div>Summaryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</div>}
+                {currentPage === 'Summary' && <div>SummaryPage</div>}
                 {currentPage === 'Risk Timeline' && <TimelinePanel/>}
                 {currentPage === 'Your Premium' && <div>ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>}
                 {currentPage === 'Submit Info' && <div>IIIIIIIIIIIIIFJISDJF:I:JSIOEJIOSJDGOHSOIGJSIORHGOISFJ</div>}

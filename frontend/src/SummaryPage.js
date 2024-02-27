@@ -11,7 +11,7 @@ const SummaryPage = () => {
     dob: "01/01/1980"
   };
   const premium = "€200/month";
-  const riskAssessment = "139";
+  const riskAssessment = "135";
 
   return (
     <div className="summary-container">
