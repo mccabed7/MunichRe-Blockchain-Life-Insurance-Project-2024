@@ -165,7 +165,7 @@ const RegisterForm = () => {
                         onChange={onChange}
                     />
                 ))}
-                <Link to="/dashboard"><button>Register</button></Link>
+                <button>Register</button>
             </form>
         </div>
     );
@@ -223,7 +223,7 @@ const LoginForm = () => {
             placeholder: "Password",
             errorMessage: "Password must be at least 8 characters, and contain at least one uppercase letter and one special character",
             label: "Password",
-            //pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             required: true
         },
         {
