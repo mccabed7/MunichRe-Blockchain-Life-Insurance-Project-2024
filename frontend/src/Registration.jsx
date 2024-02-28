@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import RegistrationInput from "./RegistrationInput";
 import { useNavigate } from 'react-router-dom';
 
-
 const Registration = () => {
 
     const [isSignUp, setIsSignUp] = useState(true);
@@ -101,9 +100,54 @@ const RegisterForm = () => {
         }
     ];
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const isFormValid = () => {
+        const hasFirstName = (values.firstname != null);
+        const hasLastName = (values.lastname != null);
+        const hasDateOfBirth = (values.dateOfBirth != null);
+        const hasEmail = (values.email != null);
+        const hasPassword = (values.password != null);
+        const hasConfirmPassword = (values.confirmPassword != null);
+        return hasFirstName && hasLastName && hasDateOfBirth && hasEmail && hasPassword && hasConfirmPassword;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    }
+        if (isFormValid()) {
+            // Method which submits to API and checks if valid
+            const dataForBackend = {
+                'firstName': values.firstname,
+                'lastName': values.lastname,
+                'dateOfBirth': values.dateOfBirth,
+                'email': values.email,
+                'password': values.password
+            }
+            try {
+                const response = await fetch('/api/customers', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataForBackend)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);	
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            
+            navigate('/dashboard');
+
+        } else {
+            
+            alert('Invalid form data. Please check your inputs.');
+        }
+    };
 
     const onChange = (e) => {
         setValues({...values, [e.target.name]: e.target.value});
@@ -121,7 +165,7 @@ const RegisterForm = () => {
                         onChange={onChange}
                     />
                 ))}
-                <Link to="/dashboard"><button>Register</button></Link>
+                <button>Register</button>
             </form>
         </div>
     );
@@ -179,7 +223,7 @@ const LoginForm = () => {
             placeholder: "Password",
             errorMessage: "Password must be at least 8 characters, and contain at least one uppercase letter and one special character",
             label: "Password",
-            //pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             required: true
         },
         {
