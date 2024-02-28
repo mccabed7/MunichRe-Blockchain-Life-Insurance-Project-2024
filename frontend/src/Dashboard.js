@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import TimelinePanel from './TimelinePanel';
 import './Dashboard.css';
 import SummaryPage from './SummaryPage';
+import SubmitInfo from './SubmitInfo';
 
 
 function Dashboard(){
@@ -20,10 +21,10 @@ function Dashboard(){
         <div className='dashboard' style={{ display: 'flex', color: 'white' }}>
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
             <div className='dashboard-panel'>
-                {currentPage === 'Summary' && SummaryPage}
+                {currentPage === 'Summary' && <SummaryPage/>}
                 {currentPage === 'Risk Timeline' && <TimelinePanel/>}
                 {currentPage === 'Your Premium' && <div>ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</div>}
-                {currentPage === 'Submit Info' && <div>IIIIIIIIIIIIIFJISDJF:I:JSIOEJIOSJDGOHSOIGJSIORHGOISFJ</div>}
+                {currentPage === 'Submit Info' && <SubmitInfo/>}
             </div>
         </div>
     )
