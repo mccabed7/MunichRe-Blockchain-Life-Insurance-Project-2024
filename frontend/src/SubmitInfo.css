@@ -6,15 +6,15 @@
     justify-content: center;
     display: flex;
     align-items: center;
-    height: 94vh;
-    width: 70vh;
+    height: 89%;
+    width: 30%;
     position: absolute;
-    top: 5%;
+    top:4%;
     transform: translate(99%, -3%);
     backdrop-filter: blur(20px);
-    padding: 17px 60px;
+    padding: 2%;
     border-radius: 10px;
-    box-shadow: 0 0 30px rgb(255, 255, 255) inset;
+    box-shadow: 1.5% rgb(255, 255, 255) inset;
 
 }
 
@@ -23,12 +23,12 @@
     font-family: Poppins,sans-serif;
     outline: none;
     background-color: white;
-    padding: 3px 0px 3px 3px;
-    margin: 5px 0px 3px 0px;
+    padding: 1%;
+    margin: 0.5%;
     border: none;
     border: 1px solid #000000;
     border-radius: 9px;
-    height: 6vh;
+    height: 5.3vh;
     width: 43.5vh;
 
 }
@@ -42,7 +42,7 @@
 .submitInfo column{
     text-align: center;
     align-items: center;
-    row-gap: 2.5vh;
+    row-gap: 2vh;
     max-width: 40vh;
 }
 
