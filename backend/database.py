@@ -57,7 +57,7 @@ def add_Customer(firstName : str, lastName : str, dateofBirth : str, address : s
 
 #modify_Value takes the id, category to be changed and change to be made as parameters and applies the change
 def modify_Value( id : int, category : str, change):
-    stringId = str(id)                      #change id to a string
+    # stringId = str(id)                      #change id to a string
     customerDatabase[id][category] = change #change the value by referring to key name
 
     # category has to be "id", "firstName", "lastName", "dateofBirth", "address", "height", "weight" or "smoker"
@@ -67,7 +67,7 @@ def modify_Value( id : int, category : str, change):
 #delete_Value deletes either the customer's account data or a specific piece of their data(may not be necessary) taking the parameters id and itemforDeletion
 def delete_Value( id : int, itemforDeletion : str):
     # if the itemforDeletion parameter is All or all, delete all of the customer's data
-    if itemforDeletion.lower() == "all":
+    if itemforDeletion == "all":
         del customerDatabase[id]
     #else delete specific piece of data
     else:
@@ -77,13 +77,11 @@ def delete_Value( id : int, itemforDeletion : str):
 #It takes the customer's id and the item to access as parameters
 def access_Value( id : int, itemtoAccess : str):
     #if the itemtoAccess parameter is all or All, access all of the specified customer's data
-    if itemtoAccess.lower() == "all":
-        x = customerDatabase[id]
-        return x
+    if itemtoAccess == "all":
+        return customerDatabase.get(id, None)
     #else access specific piece of data
     else:
-        x = customerDatabase[id][itemtoAccess]
-        return x
+        return customerDatabase.get(id).get(itemtoAccess, None)
         
 '''
 add_Customer("Alan", "Johnson", "08/09/2001", "17 Plum lane", 165, 71, "FALSE");
