@@ -3,6 +3,8 @@
 
 #Nested dictionary with temporary values
 #
+
+# do NOT make a tag called "all"
 customerDatabase = {
     1 : {
         "id" : 1,
@@ -62,16 +64,19 @@ def modify_Value( id : int, category : str, change):
 
     # category has to be "id", "firstName", "lastName", "dateofBirth", "address", "height", "weight" or "smoker"
     # but other stuff still works and will add stuff to the table.
-
+    return customerDatabase[id]
 
 #delete_Value deletes either the customer's account data or a specific piece of their data(may not be necessary) taking the parameters id and itemforDeletion
 def delete_Value( id : int, itemforDeletion : str):
     # if the itemforDeletion parameter is All or all, delete all of the customer's data
     if itemforDeletion == "all":
-        del customerDatabase[id]
+        return customerDatabase.pop(id)
+        # del customerDatabase[id]
     #else delete specific piece of data
     else:
-        del customerDatabase[id][itemforDeletion]
+        customerDatabase[id][itemforDeletion] = "" # keep the tag
+        return customerDatabase[id]
+        # del customerDatabase[id][itemforDeletion]
 
 #access_Value allows for easy access to some or all of a customer's data
 #It takes the customer's id and the item to access as parameters

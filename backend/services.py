@@ -28,14 +28,17 @@ def add_customer(customer):
 
     return db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
 
-def add_item(id, newItem, itemtoAccess):
-    itemtoAdd = newItem.get(itemtoAccess, "")                                          #      store value of item in itemtoAdd
-    db.modify_Value(id, itemtoAccess, itemtoAdd)
-    return db.access_Value(id, "all")
+def update_item(id, itemtoAccess, newItem):
+    if itemtoAccess in db.customerDatabase[id]:
+        return db.modify_Value(id, itemtoAccess, newItem)
+    # itemtoAdd = newItem.get(itemtoAccess, "")                                          #      store value of item in itemtoAdd
+    
+    return None # prevent creation of new tags
 
 def update_customer(id, updatedValues):
-    if id in db.customerDatabase:
-        for key, value in updatedValues.items():                  # for each key, value pair in updatedValues
-            db.modify_Value(id, key, value)
+    for key, value in updatedValues.items():                  # for each key, value pair in updatedValues
+        update_item(id, key, value)
     return db.access_Value(id, "all")
 
+def customer_delete(id, tag='all'):
+    return db.delete_Value(id, tag)

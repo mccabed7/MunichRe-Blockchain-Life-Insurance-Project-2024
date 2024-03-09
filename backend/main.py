@@ -24,30 +24,34 @@ def customers_Request():
 
 @app.route('/api/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'PUT', 'DELETE']) #define /customers/id/itemtoAccess endpoint for methods Get, Post and Delete
 def customer_Item_Request(id, itemtoAccess):                                                              #if passed id is present in databse
-  if request.method == 'GET':                                                            #  if request is a Get
-    item = get_customer(id, itemtoAccess)
-    if item != None:           #    if passed item is in customer with passed id or passed item is "all"
-      return item, 200                                         #      return corresponding item and status code 200(OK)
-    else:                                                                                #      else return item not found error and status 404(Not Found)
-      return {'error' : 'item not found'}, 404   
-  elif request.method == 'PUT':                                                         #  else if request is a Post
-    item = get_customer(id, itemtoAccess)
-    if itemtoAccess not in db.customerDatabase[id]:                                         #    if itemtoAccess does not already exist in specified customer   
-      newItem = request.get_json()                                                       #      store passed json in newItem                                 
-      return add_item(id, newItem, itemtoAccess), 201                                          #      return specified customer and status 201(Created)
-  elif request.method == 'DELETE':                                                       #  else if request is Delete
-    if itemtoAccess in db.customerDatabase[id] or itemtoAccess.lower() == 'all':            #    if itemtoAccess exists or is "all"
-      db.delete_Value(id, itemtoAccess)                                                     #      delete specified customer's item or all customer's data
-      return {}, 204                                                       #      return error code 204(No Content)
-#      else:                                                                                #    else return item not found error and status 404(Not Found)
+  if id in db.customerDatabase:
+    if request.method == 'GET':                                                            #  if request is a Get
+      customer = get_customer(id, itemtoAccess)
+      if customer != None:           #    if passed item is in customer with passed id or passed item is "all"
+        return customer, 200                                         #      return corresponding item and status code 200(OK)
+      else:                                                                                #      else return item not found error and status 404(Not Found)
+        return {'error' : 'item not found'}, 404   
+    elif request.method == 'PUT':                                                         #  else if request is a Post
+                                            #    if itemtoAccess does not already exist in specified customer   
+      newItem = str(request.get_data())                                                      #      store passed json in newItem                                 
+      customer = update_item(id, newItem, itemtoAccess)
+      return customer, 201                                          #      return specified customer and status 201(Created)
+    elif request.method == 'DELETE':                                                       #  else if request is Delete
+                 #    if itemtoAccess exists or is "all"
+                                                             #      delete specified customer's item or all customer's data
+        return customer_delete(id, itemtoAccess), 204                                                       #      return error code 204(No Content)
+  #      else:                                                                                #    else return item not found error and status 404(Not Found)
   return {'error' : 'id or item not found'}, 404
   # 404 is not used like this, its used when the api endpoint was not found
   
-@app.route('/api/customers/<int:id>/update', methods=['PUT'])   #define endpoint /customers/id/update for method Patch
+@app.route('/api/customers/<int:id>', methods=['GET', 'PUT'])   #define endpoint /customers/id/update for method Patch
 def update_Customer(id): 
   if id in db.customerDatabase:                                  #if id is present in database
-    updatedValues = request.get_json()                        # store json passed with the request in updatedValues                       
-    return update_customer(id, updatedValues), 200   # return customer's data along with status 200(OK)
+    if request.method == 'PUT':
+      updatedValues = request.get_json()                        # store json passed with the request in updatedValues                       
+      return update_customer(id, updatedValues), 200   # return customer's data along with status 200(OK)
+    elif request.method == 'GET':
+      return get_customer(id), 200
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
 
