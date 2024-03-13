@@ -55,7 +55,7 @@ def update_Customer(id):
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
 
-@app.route('/api/login', methods=['POST', 'GET'])
+@app.route('/api/login', methods=['POST', 'GET', 'DELETE'])
 def login_to_Account():
   arguments = request.args
   emailAddress = arguments.get("emailAddress", "")
@@ -79,6 +79,13 @@ def login_to_Account():
         return sid.add_Session_id(emailAddress), 200    #Placeholder, unsure of what to do upon success
     else:
       return {'error' : 'invalid email address'}, 400
+  #Delete request, assuming we don't want to keep tag
+  elif request.method == 'DELETE':
+    if emailAddress in login.Users:
+      return delete_Details(emailAddress), 204
+    else: 
+      return {'error': 'invalid emaill address'}, 400  
+     
   
 
 if __name__ == '__main__':

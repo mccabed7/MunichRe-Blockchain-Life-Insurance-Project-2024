@@ -2,6 +2,7 @@
 # it will also call many helper functions in those files
 import database as db
 import login
+from login import *      #Temporary
 import sessionId as sid
 # it will be used by main.py
 

@@ -18,3 +18,6 @@ def add_Details(emailAddress, signupDetails):
     password = signupDetails.get("password", "")
     data = signupDetails.get("data", "")
     Users[emailAddress] = {"password" : password, "data" : data}
+
+def delete_Details(emailAddress):
+    return Users.pop(emailAddress)
