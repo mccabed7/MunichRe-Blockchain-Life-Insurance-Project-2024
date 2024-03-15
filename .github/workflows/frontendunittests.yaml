@@ -1,0 +1,24 @@
+name: Frontend Unit Tests
+
+on: 
+  pull_request
+
+env:
+    CI: false
+
+jobs:
+  test_pull_request:
+    runs-on: windows-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 20.11.0
+    - name: download npm
+      run: cd frontend && npm ci
+    - name: configure unit tests
+      run: cd frontend && cd src && npm i --save-dev @testing-library/react react-test-renderer
+    - name: run all unit tests
+      run: cd frontend && npm run test
