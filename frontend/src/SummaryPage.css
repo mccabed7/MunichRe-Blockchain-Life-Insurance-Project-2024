@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Outfit", Outfit;
+  background-color: #4b0082; /* Dark purple background color */
+}
+
+.summary-overlay {
+  position: flex;
+  top: 0;
+  left: 0;
+  right: 50%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* Horizontally center content */
+  align-items: center; /* Vertically center content */
+  background-color: rgb(255, 255, 255); /* Low opacity white overlay */
+}
+
+.summary-container {
+  box-shadow: 10px 10px 10px rgba(48, 0, 100, 0.6);
+  align-self: center;
+  background-color: rgb(145, 160, 236); /* White background color for the content box */
+  padding: 40px;
+  margin-left: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-radius: 40px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+  max-width: 800px; /* Limit the width of the content box */
+  width: 90%; /* Adjust the width as needed */
+}
+
+.personal-info {
+  font-family: "Outfit", Outfit;
+  margin-bottom: 40px;
+  text-shadow: 1px 1px 1px rgba(72, 72, 72, 0.6);
+}
+
+.premium-box,
+.risk-assessment-box {
+  font-family: "Outfit", Outfit;
+  margin-bottom: 20px;
+}
+
+.premium-box,
+.risk-assessment-box {
+  background-color: #231445;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.premium-box h2,
+.risk-assessment-box h2 {
+  margin-top: 0;
+}
+
+
+
+  

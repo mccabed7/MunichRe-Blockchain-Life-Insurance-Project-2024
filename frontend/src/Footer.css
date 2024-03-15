@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+/* footerBox Component */
+footerBox {
+    font-family: Poppins, sans-serif;
+    display: block;
+    padding-top: 3.5%;
+    padding-bottom: 3.5%;
+    background: #6030a8;
+    justify-content: left;
+    width: 100%;;
+}
+
+/* column Component */
+column {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    margin-left: 5%;
+    width: 30%;
+}
+
+/* row Component */
+row {
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    flex-direction: row;
+    grid-gap: 4%;
+}
+
+/* heading Component */
+heading { 
+    color: #fff;
+    text-align: left;
+    font-size: 280%;
+    font-weight: bold;
+
+
+    @media screen and (max-width: 1300px){
+        font-size: 210%;
+    }
+
+    @media screen and (max-width: 1100px){
+        font-size: 180%;
+    }
+
+    @media screen and (max-width: 800px){
+        font-size: 150%;
+    }
+
+}
+
+/* footerLink Component */
+footerLink {
+    font-family: Poppins, sans-serif;
+    text-align: left;
+    color: #fff;
+    font-size: 150%;
+    text-decoration: none;
+
+    padding-left: 20%;
+
+
+    @media screen and (max-width: 1300px){
+        font-size: 150%;
+    }
+
+    @media screen and (max-width: 1100px){
+        font-size: 140%;
+    }
+
+    @media screen and (max-width: 800px){
+        font-size: 120%;
+    }
+
+}
+
+footerLink:hover {
+    color: #3484b9;
+    transition: 200ms ease-in;
+}
+
+a:link{
+    text-decoration: none;
+}
+
+
