@@ -30,7 +30,7 @@ def customer_Item_Request(id, itemtoAccess):                                    
       if customer != None:           #    if passed item is in customer with passed id or passed item is "all"
         return customer, 200                                         #      return corresponding item and status code 200(OK)
       else:                                                                                #      else return item not found error and status 404(Not Found)
-        return {'error' : 'item not found'}, 404   
+        return {'error' : 'item not found'}, 400   
     elif request.method == 'PUT':                                                         #  else if request is a Post
                                             #    if itemtoAccess does not already exist in specified customer   
       newItem = str(request.get_data())                                                      #      store passed json in newItem                                 
@@ -41,7 +41,7 @@ def customer_Item_Request(id, itemtoAccess):                                    
                                                              #      delete specified customer's item or all customer's data
         return customer_delete(id, itemtoAccess), 204                                                       #      return error code 204(No Content)
   #      else:                                                                                #    else return item not found error and status 404(Not Found)
-  return {'error' : 'id or item not found'}, 404
+  return {'error' : 'id or item not found'}, 400
   # 404 is not used like this, its used when the api endpoint was not found
   
 @app.route('/api/customers/<int:id>', methods=['GET', 'PUT'])   #define endpoint /customers/id/update for method Patch
@@ -53,7 +53,7 @@ def update_Customer(id):
     elif request.method == 'GET':
       return get_customer(id), 200
   else:
-    return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
+    return {'error' : 'id not found'}, 400                    #else return error id not found and status 404(Not Found)
 
 @app.route('/api/login', methods=['POST', 'GET', 'DELETE', 'PUT'])
 def login_to_Account():
@@ -66,32 +66,38 @@ def login_to_Account():
       signupDetails = request.get_json()
       return login.add_Details(emailAddress, signupDetails), 201
     else:
-      return {'error' : 'Email Address already in use'}, 401
+      return {'error' : 'Email Address already in use'}, 403
   #for GET request, url must be /api/login?emailAddress=x&password=y
   #where x is email address and y is password used to sign in  
   elif request.method == 'GET':     
     if emailAddress in login.Users:
       password = arguments.get("password", "")
-      result = login.attempt_Login(emailAddress, password)
+      result = login(emailAddress, password)
       if result == None:
         return {'error' : 'Your password is incorrect'}, 400
       else:
-        return sid.add_Session_id(emailAddress), 200    #Placeholder, unsure of what to do upon success
+        return result, 200    #Placeholder, unsure of what to do upon success
     else:
       return {'error' : 'invalid email address'}, 400
   #Delete request, assuming we don't want to keep tag
   #Url should be in the form /api/login?emailAddress=x    where x is email Address to delete
   elif request.method == 'DELETE':
+    sid = None
     if emailAddress in login.Users:
-      return delete_Details(emailAddress), 204
+      return delete_user(sid, emailAddress), 204
     else: 
       return {'error': 'invalid email address'}, 400  
   #Put request used for modifying User password
   #Url should be in form /api/login?emailAddress=x&newPassword=y
   elif request.method == 'PUT':
+    sid = None
     if emailAddress in login.Users:
-      modify_Password(emailAddress, arguments)
-      return jsonify(Users[emailAddress])
+      result = change_password(sid, emailAddress, arguments)
+      #return jsonify(Users[emailAddress])
+      if result == None:
+        return {'error': ''}, 403
+      else:
+        return result, 200
     else:
       return {'error': 'invalid email address'}, 400
      

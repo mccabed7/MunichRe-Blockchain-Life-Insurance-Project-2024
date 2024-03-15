@@ -1,9 +1,9 @@
 # this is where we will import all the other files
 # it will also call many helper functions in those files
 import database as db
-import login
-from login import *      #Temporary
-import sessionId as sid
+import login as users
+# from login import *      #Temporary
+
 # it will be used by main.py
 
 # there should be at least one function for each interactive API endpoint
@@ -43,3 +43,35 @@ def update_customer(id, updatedValues):
 
 def customer_delete(id, tag='all'):
     return db.delete_Value(id, tag)
+
+
+###### TODO 
+## use sid to get email and verify that its their 
+#  user they are changing (in check_Session_id)
+##  
+
+def add_user(email, password):
+    # create customer
+    result = users.add_Details(email, password)
+    if result != None:
+        return login(email, password)
+    # return result
+
+def delete_user(sid, email):
+    if verify_sid(sid, email):
+        return users.delete_Details(sid, email)
+    return None
+
+def change_password(sid, email, password):
+    if verify_sid(sid):
+        return users.modify_Password(email, password)
+    return None
+
+def login(email, password):
+    if users.attempt_Login(email, password):
+        return users.add_Session_id(email)
+    return None
+
+# bool
+def verify_sid(sid):
+    return users.check_Session_id(sid)
