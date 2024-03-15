@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom/client";
+//import ReactDOM from "react-dom/client";
 import "./SubmitInfo.css";
 import React, { useState } from "react";
 
@@ -124,8 +124,8 @@ function SubmitInfo() {
   )
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<SubmitInfo />);
+//const root = ReactDOM.createRoot(document.getElementById('root'));
+//root.render(<SubmitInfo />);
 
 
 export default SubmitInfo;
