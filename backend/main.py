@@ -55,7 +55,7 @@ def update_Customer(id):
   else:
     return {'error' : 'id not found'}, 404                    #else return error id not found and status 404(Not Found)
 
-@app.route('/api/login', methods=['POST', 'GET', 'DELETE'])
+@app.route('/api/login', methods=['POST', 'GET', 'DELETE', 'PUT'])
 def login_to_Account():
   arguments = request.args
   emailAddress = arguments.get("emailAddress", "")
@@ -80,11 +80,20 @@ def login_to_Account():
     else:
       return {'error' : 'invalid email address'}, 400
   #Delete request, assuming we don't want to keep tag
+  #Url should be in the form /api/login?emailAddress=x    where x is email Address to delete
   elif request.method == 'DELETE':
     if emailAddress in login.Users:
       return delete_Details(emailAddress), 204
     else: 
-      return {'error': 'invalid emaill address'}, 400  
+      return {'error': 'invalid email address'}, 400  
+  #Put request used for modifying User password
+  #Url should be in form /api/login?emailAddress=x&newPassword=y
+  elif request.method == 'PUT':
+    if emailAddress in login.Users:
+      modify_Password(emailAddress, arguments)
+      return jsonify(Users[emailAddress])
+    else:
+      return {'error': 'invalid email address'}, 400
      
   
 

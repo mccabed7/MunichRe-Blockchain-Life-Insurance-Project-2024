@@ -21,3 +21,8 @@ def add_Details(emailAddress, signupDetails):
 
 def delete_Details(emailAddress):
     return Users.pop(emailAddress)
+
+def modify_Password(emailAddress, arguments):
+    newPassword = arguments.get("newPassword", "")
+    password = 'password'
+    Users[emailAddress][password] = newPassword
