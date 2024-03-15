@@ -53,14 +53,40 @@ contract Subscription{
 
         emit SubscriptionStarted(msg.sender, _currentSubscriptionId, block.timestamp, block.timestamp + 30 days);
     }
-    function updateRisk(address subscriberAddress) external{
-        require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
-        //stored in wei as floats do not work in solidity
-        uint256 amount = (100000000000000000 *_subscribers[subscriberAddress].age)/2 * (_subscribers[subscriberAddress].isSmoker? 3:1);
-        _subscribers[subscriberAddress].premium = amount;
-        _subscribers[subscriberAddress].riskAssessments.push(amount/100000000000000);
-    }
+  function updateRisk(address subscriberAddress) external {
+    require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
+
+    uint256 ageFactor = calculateAgeFactor(_subscribers[subscriberAddress].age);
+    bool isSmoker = _subscribers[subscriberAddress].isSmoker ;
+
+    // Calculate premium based on factors
+    uint256 premium = calculatePremium(ageFactor, isSmoker);
+
+    // Update subscriber's premium and risk assessments
+    _subscribers[subscriberAddress].premium = premium;
+    _subscribers[subscriberAddress].riskAssessments.push(premium);
+}
+
+
+function calculateAgeFactor(uint256 age) internal pure returns (uint256) {
     
+    return age;
+}
+
+function calculatePremium(uint256 ageFactor, bool isSmoker) internal pure returns (uint256) {
+    uint256 premium =1;
+    if(isSmoker){
+        ageFactor=ageFactor*2;
+        premium=premium*ageFactor;
+        return premium;
+    }
+    else{
+      premium=premium*ageFactor;
+        return premium;
+    }
+}
+
+
 
     function renewSubscription(uint256 subscriptionId) external payable {
         require(_subscribers[msg.sender].subscriberAddress == msg.sender, "Subscription: OnlySubscribers");
