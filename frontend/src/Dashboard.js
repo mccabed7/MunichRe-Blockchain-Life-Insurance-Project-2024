@@ -18,7 +18,7 @@ function Dashboard(){
       };
 
     return(
-        <div className='dashboard' style={{ display: 'flex', color: 'white' }}>
+        <div data-testid = "dashboard main div" className='dashboard' style={{ display: 'flex', color: 'white' }}>
             <Sidebar items={items}  onSidebarClick={handleSidebarClick} />
             <div className='dashboard-panel'>
                 {currentPage === 'Summary' && <SummaryPage/>}
