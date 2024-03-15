@@ -246,16 +246,39 @@ const LoginForm = () => {
         return hasPassword && hasEmail;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (isFormValid()) {
-            //WE ARE GONNA HAVE A METHOD IN HERE FOR SUBMITTING TO API AND CHECKING IF VALID!!!
+            const dataForBackend = {
+                'email': values.email,
+                'password': values.password
+            }
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataForBackend)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);	
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            
             navigate('/dashboard');
+
         } else {
             
             alert('Invalid form data. Please check your inputs.');
         }
     };
+        
 
     const onChange = (e) => {
         setValues({...values, [e.target.name]: e.target.value});
