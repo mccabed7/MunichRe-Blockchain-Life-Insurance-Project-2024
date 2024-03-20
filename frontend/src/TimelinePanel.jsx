@@ -4,7 +4,7 @@ import './TimelinePanel.css';
 
 function TimelinePanel (){
     return <div className='panel'>
-        {/* <Timeline/> */}
+        <Timeline/>
     </div>
 }
 
