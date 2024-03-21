@@ -5,96 +5,13 @@ import json
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
 
-USER_CONTRACT_ABI = [
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "newUser",
-        "type": "string"
-      },
-      {
-        "internalType": "bool",
-        "name": "smokerStatus",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "valuePayout",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "userAge",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "InitialPremium",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "contractLength",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": False,
-    "inputs": [
-      {
-        "indexed": False,
-        "internalType": "uint256",
-        "name": "riskUpdate",
-        "type": "uint256"
-      },
-      {
-        "indexed": False,
-        "internalType": "uint256",
-        "name": "newRisk",
-        "type": "uint256"
-      }
-    ],
-    "name": "updatedRisk",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "smokerStatus",
-        "type": "bool"
-      }
-    ],
-    "name": "updateRisk",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "premiumPayed",
-        "type": "bool"
-      }
-    ],
-    "name": "verifyPremiumPayment",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
-]
-
+USER_CONTRACT_ABI = abi = [{ "inputs": [{ "internalType": "bool", "name": "newSmokerStatus", "type": "bool" }, { "internalType": "bool", "name": "newGymStatus", "type": "bool" }, { "internalType": "uint256", "name": "newWeight", "type": "uint256" }, { "internalType": "uint256", "name": "newAge", "type": "uint256" }], "name": "updateProfile", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getUserProfile", "outputs": [{ "components": [{ "internalType": "string", "name": "userName", "type": "string" }, { "internalType": "bool", "name": "isSmoker", "type": "bool" }, { "internalType": "bool", "name": "goesToGym", "type": "bool" }, { "internalType": "uint256", "name": "weight", "type": "uint256" }, { "internalType": "uint256", "name": "age", "type": "uint256" }, { "internalType": "uint256", "name": "payout", "type": "uint256" }, { "internalType": "uint256", "name": "premium", "type": "uint256" }, { "internalType": "uint256", "name": "contractCreationDate", "type": "uint256" }, { "internalType": "uint256", "name": "contractAnullment", "type": "uint256" }, { "internalType": "uint256", "name": "nextPaymentDate", "type": "uint256" }], "internalType": "struct Insurance.UserProfile", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "premiumPaid", "type": "bool" }], "name": "verifyPremiumPayment", "outputs": [], "stateMutability": "nonpayable", "type": "function" }]
 
 # Address calling the functions/signing transactions
 CALLER_ADDRESS = "0x199731A10c9173b1f141C0515ea79238d75824B5"  # Ethereum PUBLIC address from MetaMask wallet (Testnet Account)
 
 # Contract address for which you want to get the ABI
-CONTRACT_ADDRESS = "0x1C0dEE7D2867Eb3319ea950b2831e5678086B8CA" # CONTRACT_ADDRESS -  Deployed contracts tab in Remix
+CONTRACT_ADDRESS = "0xF7e841C6613cE6B19A5eb11ae74255115e6c6318" # CONTRACT_ADDRESS -  Deployed contracts tab in Remix
 
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
@@ -132,6 +49,7 @@ def check_connection():
 def deploy():
     # requires hardhat installed, `npm install hardhat`
     # and existing compiled contract (do this with `npx hardhat compile`)
+    # need to update the USER_CONTRACT_ABI after compiling
     cont_addr = sp.run(["npx", "hardhat", "run", "deployments/deploy.js", "--network sepolia"], capture_output=True)
     cont_addr = cont_addr.remove_prefix("Contract Deployed to Address: ")
     return cont_addr
@@ -177,12 +95,7 @@ def example():
 #   except Exception as e:
 #       print(f"Error calling function: {e}")
 
-def update_risk():
-  nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
-
-  # Then use the parsed ABI to create the contract instance
-  contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=USER_CONTRACT_ABI)
-
+def list_abi_functions():
   # Now, parsed_abi should be a list of dictionaries
   if isinstance(USER_CONTRACT_ABI, list):
       # Extract functions from the ABI
@@ -197,8 +110,15 @@ def update_risk():
   else:
       print("The ABI was not parsed into a list as expected.")
 
+def update_risk(contract_address):
+  nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
+
+  # Then use the parsed ABI to create the contract instance
+  contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
+
   try:
-      ret = contract.functions.updateRisk(True).call()
+      # ret = contract.functions.updateProfile(True, False, 70, 30).call()
+      ret = contract.functions.getUserProfile().call()
       print(ret)
   except Exception as e:
     print(f"Error calling function: {e}")
@@ -207,5 +127,6 @@ if __name__=="__main__":
     # get_contract_abi()
     
     # example()
-    update_risk()
+    list_abi_functions()
+    update_risk(CONTRACT_ADDRESS)
 
