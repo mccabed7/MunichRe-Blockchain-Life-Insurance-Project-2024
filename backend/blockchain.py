@@ -1,11 +1,94 @@
 from web3 import Web3 # requires you to run `pip install web3`
 # import os
-import requests
+import subprocess as sp
 import json
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
 
-cONTRACT_ABI = None
+USER_CONTRACT_ABI = [
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "newUser",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "smokerStatus",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "valuePayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "userAge",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "InitialPremium",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "contractLength",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": False,
+    "inputs": [
+      {
+        "indexed": False,
+        "internalType": "uint256",
+        "name": "riskUpdate",
+        "type": "uint256"
+      },
+      {
+        "indexed": False,
+        "internalType": "uint256",
+        "name": "newRisk",
+        "type": "uint256"
+      }
+    ],
+    "name": "updatedRisk",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "smokerStatus",
+        "type": "bool"
+      }
+    ],
+    "name": "updateRisk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "premiumPayed",
+        "type": "bool"
+      }
+    ],
+    "name": "verifyPremiumPayment",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
+
 
 # Address calling the functions/signing transactions
 CALLER_ADDRESS = "0x199731A10c9173b1f141C0515ea79238d75824B5"  # Ethereum PUBLIC address from MetaMask wallet (Testnet Account)
@@ -27,24 +110,31 @@ def check_connection():
   else:
       print("Connection Failed")
   
-def get_contract_abi():
-  # URL for the Etherscan API endpoint to get contract ABI
-  etherscan_url = f"https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address={CONTRACT_ADDRESS}&apikey={ETHERSCAN_API_KEY}"
+# def get_contract_abi():
+#   # URL for the Etherscan API endpoint to get contract ABI
+#   etherscan_url = f"https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address={CONTRACT_ADDRESS}&apikey={ETHERSCAN_API_KEY}"
 
-  # Make an API request to Etherscan
-  response = requests.get(etherscan_url)
+#   # Make an API request to Etherscan
+#   response = requests.get(etherscan_url)
 
-  # Parse the response JSON
-  data = response.json()
+#   # Parse the response JSON
+#   data = response.json()
 
-  # Check if the request was successful
-  if data['status'] == '1' and data['message'] == 'OK':
-      # ABI is returned as a JSON-encoded string, so we need to parse it
-      cONTRACT_ABI = json.loads(data['result'])
-      print("Contract ABI:")
-      print(json.dumps(cONTRACT_ABI, indent=2))
-  else:
-      print("Error fetching contract ABI:", data['result'])
+#   # Check if the request was successful
+#   if data['status'] == '1' and data['message'] == 'OK':
+#       # ABI is returned as a JSON-encoded string, so we need to parse it
+#       cONTRACT_ABI = json.loads(data['result'])
+#       print("Contract ABI:")
+#       print(json.dumps(cONTRACT_ABI, indent=2))
+#   else:
+#       print("Error fetching contract ABI:", data['result'])
+
+def deploy():
+    # requires hardhat installed, `npm install hardhat`
+    # and existing compiled contract (do this with `npx hardhat compile`)
+    cont_addr = sp.run(["npx", "hardhat", "run", "deployments/deploy.js", "--network sepolia"], capture_output=True)
+    cont_addr = cont_addr.remove_prefix("Contract Deployed to Address: ")
+    return cont_addr
 
 def example():
    # Initialize address nonce
@@ -118,3 +208,4 @@ if __name__=="__main__":
     
     # example()
     update_risk()
+
