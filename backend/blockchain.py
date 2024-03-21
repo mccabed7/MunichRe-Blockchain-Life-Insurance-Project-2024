@@ -2,6 +2,7 @@ from web3 import Web3 # requires you to run `pip install web3`
 # import os
 import subprocess as sp
 import json
+import time
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
 
@@ -110,7 +111,7 @@ def list_abi_functions():
   else:
       print("The ABI was not parsed into a list as expected.")
 
-def update_risk(contract_address):
+def get_contract_details(contract_address):
   nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
 
   # Then use the parsed ABI to create the contract instance
@@ -119,6 +120,13 @@ def update_risk(contract_address):
   try:
       # ret = contract.functions.updateProfile(True, False, 70, 30).call()
       ret = contract.functions.getUserProfile().call()
+      name, isSmoker, isGymBro, weight, age, max_payout, monthy_premium, creation, expiry, nextpay = ret #('John', True, True, 70, 30, 75000, 450, 1711061088, 1742597088, 1713653088)
+      creation = time.ctime(creation)
+      print(creation)
+      expiry = time.ctime(expiry)
+      print(expiry)
+      nextpay = time.ctime(nextpay)
+      print(nextpay)
       print(ret)
   except Exception as e:
     print(f"Error calling function: {e}")
@@ -128,5 +136,5 @@ if __name__=="__main__":
     
     # example()
     list_abi_functions()
-    update_risk(CONTRACT_ADDRESS)
+    get_contract_details(CONTRACT_ADDRESS)
 
