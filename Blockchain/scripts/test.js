@@ -5,90 +5,120 @@ async function main() {
   const abi = [
     // Constructor
     {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "newUser",
-                "type": "string"
-            },
-            {
-                "internalType": "bool",
-                "name": "smokerStatus",
-                "type": "bool"
-            },
-            {
-                "internalType": "uint256",
-                "name": "valuePayout",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "userAge",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "InitialPremium",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "contractLength",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "newSmokerStatus",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "newGymStatus",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "newWeight",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "newAge",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateProfile",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
-    // updatedRisk event
+    // getUserProfile function
     {
-        "anonymous": false,
-        "inputs": [
+      "inputs": [],
+      "name": "getUserProfile",
+      "outputs": [
+        {
+          "components": [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "riskUpdate",
-                "type": "uint256"
+              "internalType": "string",
+              "name": "userName",
+              "type": "string"
             },
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "newRisk",
-                "type": "uint256"
-            }
-        ],
-        "name": "updatedRisk",
-        "type": "event"
-    },
-    // updateRisk function
-    {
-        "inputs": [
+              "internalType": "bool",
+              "name": "isSmoker",
+              "type": "bool"
+            },
             {
-                "internalType": "bool",
-                "name": "smokerStatus",
-                "type": "bool"
+              "internalType": "bool",
+              "name": "goesToGym",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256",
+              "name": "weight",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "age",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "payout",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "premium",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "contractCreationDate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "contractAnullment",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nextPaymentDate",
+              "type": "uint256"
             }
-        ],
-        "name": "updateRisk",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+          ],
+          "internalType": "struct Insurance.UserProfile",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     // verifyPremiumPayment function
     {
-        "inputs": [
-            {
-                "internalType": "bool",
-                "name": "premiumPayed",
-                "type": "bool"
-            }
-        ],
-        "name": "verifyPremiumPayment",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "premiumPaid",
+          "type": "bool"
+        }
+      ],
+      "name": "verifyPremiumPayment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
-];
+  ];
 
   // Set up the provider with the private key
   const privateKey = "241548e811c77fa4160d7916062a53fa680b349725591ebfe54d946d721dacc4";
@@ -96,29 +126,71 @@ async function main() {
   const wallet = new ethers.Wallet(privateKey, provider);
 
   // Get the deployed contract instance
-  const insuaranceAddress = "0x935128Fcb5412B8fe41AC25Ecf76B650349E7cb7"; // Replace with the actual deployed address
-  const insuarance = new ethers.Contract(insuaranceAddress, abi, wallet);
+  const insuranceAddress = "0xF7e841C6613cE6B19A5eb11ae74255115e6c6318"; // Replace with the actual deployed address
+  const insurance = new ethers.Contract(insuranceAddress, abi, wallet);
 
   // Choose an action
   console.log("Choose an action:");
-  console.log("1. Update Risk");
-  console.log("2. Verify Premium Payment");
+  console.log("1. Update Profile (Smoker Status, Gym Status, Age, Weight)");
+  console.log("2. Return User Profile Parameters");
+  console.log("3. Display Premium");
   const choice = await getUserInput("Enter your choice: ");
   if (choice === "1") {
-    const smokerStatus = await getUserInput("Are you a smoker? (true/false): ");
+    const newSmokerStatus = await getUserInput("Are you a smoker? (true/false): ");
+    const newGymStatus = await getUserInput("Do you go to the gym? (true/false): ");
+    const newWeight = await getUserInput("Enter your weight in kilograms: ");
+    const newAge = await getUserInput("Enter your age: ");
+    
     // Set gas price and gas limit options
     const options = {
       gasPrice: ethers.utils.parseUnits("1", "gwei"), // Set the gas price to 1 Gwei
       gasLimit: 2000000, // Set the gas limit to 2 million
     };
     // Call contract function with options
-    await insuarance.updateRisk(smokerStatus, options);
-    console.log("Update Risk transaction submitted.");
+    const tx = await insurance.updateProfile(newSmokerStatus, newGymStatus, newWeight, newAge, options);
+    await tx.wait(); // Wait for the transaction to be mined
+    console.log("Profile updated successfully.");
   } else if (choice === "2") {
-    // Implement code for verifying premium payment
-    console.log("Verify Premium Payment option selected.");
-  } else {
-    console.log("Invalid choice. Please enter 1 or 2.");
+    // Call getUserProfile function to retrieve user profile parameters
+    const userProfile = await insurance.getUserProfile();
+    console.log("User Profile:");
+    console.log("Username:", userProfile.userName);
+    console.log("Smoker Status:", userProfile.isSmoker);
+    console.log("Gym Status:", userProfile.goesToGym);
+    console.log("Weight:", userProfile.weight.toNumber(), "kg"); // Convert to number
+    console.log("Age:", userProfile.age.toNumber()); // Convert to number
+    console.log("Payout: €", userProfile.payout.toString());
+    console.log("Premium: €", userProfile.premium.toString());
+    console.log("Contract Creation Date:", new Date(userProfile.contractCreationDate * 1000).toLocaleString());
+    console.log("Contract Anullment Date:", new Date(userProfile.contractAnullment * 1000).toLocaleString());
+    console.log("Next Payment Date:", new Date(userProfile.nextPaymentDate * 1000).toLocaleString());
+  } else if (choice === "3") {
+    // Call getUserProfile function to retrieve user profile parameters
+const userProfile = await insurance.getUserProfile();
+
+// Perform risk calculation based on the user's profile parameters
+const baseRisk = userProfile.age.div(2).toNumber();
+let newRisk = baseRisk;
+if (userProfile.isSmoker) {
+    newRisk *= 3;
+}
+if (!userProfile.goesToGym) {
+    newRisk *= 2;
+}
+if (userProfile.weight > 100) {
+    newRisk *= 2;
+}
+
+console.log("Current Risk:", newRisk);
+    
+    
+   // Calculate premium based on the risk
+   const newPremium = newRisk * 10; // Simplified formula for premium calculation
+
+   console.log("Current Premium: €", newPremium);
+  }
+  else {
+    console.log("Invalid choice. Please enter 1, 2, or 3.");
   }
 }
 
