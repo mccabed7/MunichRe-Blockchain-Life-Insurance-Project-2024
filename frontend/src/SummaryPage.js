@@ -14,7 +14,7 @@ const SummaryPage = () => {
   const riskAssessment = "135";
 
   return (
-    <div className="summary-container">
+    <div data-testid = "summary page main div" className="summary-container">
       <div className="personal-info">
         <h2>Personal Information</h2>
         <p><strong>Name:</strong> {userInfo.name}</p>
