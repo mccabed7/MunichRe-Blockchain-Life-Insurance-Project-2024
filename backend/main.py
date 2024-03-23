@@ -59,31 +59,34 @@ def update_Customer(id):
 def login_to_Account():
   arguments = request.args
   emailAddress = arguments.get("emailAddress", "")
+  #sid = arguments.get()
   #for POST request, url must be /api/login?emailAddress=x
   #where x is email address to be used to sign up
   if request.method == 'POST':
-    if emailAddress not in login.Users:
+    if emailAddress not in users.Users:
       signupDetails = request.get_json()
-      return login.add_Details(emailAddress, signupDetails), 201
+      add_user(emailAddress, signupDetails)
+      return jsonify(users.search_Sessions(emailAddress))  #index to sessions didnt work, search_Sessions may be temporary
     else:
       return {'error' : 'Email Address already in use'}, 403
   #for GET request, url must be /api/login?emailAddress=x&password=y
   #where x is email address and y is password used to sign in  
   elif request.method == 'GET':     
-    if emailAddress in login.Users:
+    if emailAddress in users.Users:
       password = arguments.get("password", "")
       result = login(emailAddress, password)
       if result == None:
         return {'error' : 'Your password is incorrect'}, 400
       else:
-        return result, 200    #Placeholder, unsure of what to do upon success
+        return jsonify(result), 200    #Placeholder, unsure of what to do upon success
     else:
       return {'error' : 'invalid email address'}, 400
   #Delete request, assuming we don't want to keep tag
   #Url should be in the form /api/login?emailAddress=x    where x is email Address to delete
   elif request.method == 'DELETE':
     sid = None
-    if emailAddress in login.Users:
+    if emailAddress in users.Users:
+      sid = users.search_Sessions(emailAddress)
       return delete_user(sid, emailAddress), 204
     else: 
       return {'error': 'invalid email address'}, 400  
@@ -91,7 +94,8 @@ def login_to_Account():
   #Url should be in form /api/login?emailAddress=x&newPassword=y
   elif request.method == 'PUT':
     sid = None
-    if emailAddress in login.Users:
+    if emailAddress in users.Users:
+      sid = users.search_Sessions(emailAddress)
       result = change_password(sid, emailAddress, arguments)
       #return jsonify(Users[emailAddress])
       if result == None:

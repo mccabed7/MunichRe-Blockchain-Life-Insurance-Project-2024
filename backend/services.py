@@ -18,7 +18,7 @@ def get_customer(id, tag='all'):
         print(e)
         return None
 
-def add_customer(customer):
+def add_customer(customer, sid=None):
     firstName = customer.get("firstName", "")      
     lastName = customer.get("lastName", "")
     dateofBirth = customer.get("dateofBirth", "")
@@ -26,8 +26,10 @@ def add_customer(customer):
     height = customer.get("height", "")
     weight = customer.get("weight", "")
     smoker = customer.get("smoker", "")
-
-    return db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
+    c = db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
+   
+    users.add_Details(c.get("id"))
+    return c
 
 def update_item(id, itemtoAccess, newItem):
     if itemtoAccess in db.customerDatabase[id]:
@@ -55,7 +57,7 @@ def add_user(email, password):
     result = users.add_Details(email, password)
     if result != None:
         return login(email, password)
-    # return result
+    return result
 
 def delete_user(sid, email):
     if verify_sid(sid, email):
@@ -63,7 +65,7 @@ def delete_user(sid, email):
     return None
 
 def change_password(sid, email, password):
-    if verify_sid(sid):
+    if verify_sid(sid, email):
         return users.modify_Password(email, password)
     return None
 
@@ -73,5 +75,5 @@ def login(email, password):
     return None
 
 # bool
-def verify_sid(sid):
-    return users.check_Session_id(sid)
+def verify_sid(sid, email):
+    return users.check_Session_id(sid, email)
