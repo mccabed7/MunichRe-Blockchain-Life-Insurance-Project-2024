@@ -3,6 +3,14 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import RegistrationInput from "./RegistrationInput";
 import { useNavigate } from 'react-router-dom';
+import { setSessionID } from './sessionModule.jsx';
+
+
+//let sessionID = null; // Default value
+//export const setSessionID = (newID) => {
+//  sessionID = newID;
+//};
+//export const getSessionID = () => sessionID;
 
 const Registration = () => {
 
@@ -124,18 +132,25 @@ const RegisterForm = () => {
                 'password': values.password
             }
             try {
-                const response = await fetch('/api/customers', {
+                const response = await fetch('/api/login?emailAddress=' + values.email, {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(dataForBackend)
-                });
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);	
+                    }
+                    return response.json();})
+                .then(data => {
+                    setSessionID(data);
+                    console.log('Response data:', data)
+                ;});
+                
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);	
-                }
+                
 
             } catch (error) {
                 console.error('Error:', error);
@@ -261,8 +276,8 @@ const LoginForm = () => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(dataForBackend)
-                });
-
+                });//).then(resp => resp.body);
+                console.log("RESPONSE BODY: " + response.body);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);	
                 }
