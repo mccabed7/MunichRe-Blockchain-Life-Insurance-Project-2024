@@ -4,33 +4,43 @@ pragma solidity ^0.8.0;
 contract Insurance {
     struct UserInfo {
         string userName;
+        //address userAddress;
         bool isSmoker;
         bool goesToGym;
         uint256 weight; // in kilograms
-        uint256 age;
+        int256 age;
         uint256 payout;
-        uint256 premium;
+        int256 premium;
         uint256 contractCreationDate;
         uint256 contractAnullment;
         uint256 nextPaymentDate;
+        
     }
-
+    //cant place a mapping inside of a struct
+    mapping(string => int256) thirdPartyRisk;
+    //this is a space expensive implementation but is the only way to loop through a mapping
+    //if we can get rid of mappings and just save the risks 
+    mapping(uint256 => string) thirdPartyIndexes;
+    uint256 private numThirdPartyRisks = 0;
     address private owner;
     UserInfo user;
-    event RiskUpdated(uint256 newRisk);
-    event PremiumUpdated(uint256 newPremium);
-
+    event RiskUpdated(int256 newRisk);
+    event PremiumUpdated(int256 newPremium);
+    event newThirdPartyRisk(string riskDescription, int256 newRiskValue);
     constructor(
         string memory newUser,
         bool smokerStatus,
         bool gymStatus,
         uint256 userWeight,
-        uint256 userAge,
+        int256 userAge,
         uint256 valuePayout,
-        uint256 InitialPremium
+        int256 InitialPremium, 
+        //address newUserAddress,
+        uint256 anullmentDate
     ) {
         owner = msg.sender;
         user = UserInfo({
+            //userAddress : newUserAddress,
             userName: newUser,
             isSmoker: smokerStatus,
             goesToGym: gymStatus,
@@ -39,17 +49,38 @@ contract Insurance {
             payout: valuePayout,
             premium: InitialPremium,
             contractCreationDate: block.timestamp,
-            contractAnullment: block.timestamp + 365 days,
+            contractAnullment: block.timestamp + (anullmentDate * 1 days),
             nextPaymentDate: block.timestamp + 30 days
         });
     }
+    //function to set users smoker status and update existing risk
+    function setSmokerStatus(bool newSmokerStatus) public{
+        user.isSmoker = newSmokerStatus;
+        updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
+    //function to set users gym status and update existing risk
+    function setGymStatus(bool newGymStatus) public{
+        user.goesToGym = newGymStatus;
+        updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
+    //function to set users weight and update existing risk
+    function setNewWeight(uint256 newWeight) public{
+        user.weight = newWeight;
+        updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
+    //function to set users age and update existing risk
+    function setNewAge(int256 newAge) public{
+        user.age = newAge;
+        updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
+    
 
     // Function to update risk profile and premium based on user inputs
     function updateProfile(
         bool newSmokerStatus,
         bool newGymStatus,
         uint256 newWeight,
-        uint256 newAge
+        int256 newAge
     ) public returns (string memory) {
         require(msg.sender == owner, "Only the contract owner can update the profile.");
 
@@ -60,8 +91,8 @@ contract Insurance {
         user.age = newAge;
 
         // Calculate new risk and premium based on updated profile
-        uint256 newRisk = calculateRisk();
-        uint256 newPremium = calculatePremium(newRisk);
+        int256 newRisk = calculateRisk();
+        int256 newPremium = calculatePremium(newRisk);
 
         // Update user's risk profile and premium
         user.premium = newPremium;
@@ -76,10 +107,18 @@ contract Insurance {
     function getUserProfile() public view returns (UserInfo memory) {
         return user;
     }
+    //function that takes in some new risk assessment from a third party and adds it to modify the existing risk
+    function addThirdPartyData(string memory riskDesc, int256 riskValue) public {
+        thirdPartyRisk[riskDesc] = riskValue;
+        thirdPartyIndexes[numThirdPartyRisks] = riskDesc;
+        numThirdPartyRisks++;
+        emit newThirdPartyRisk(riskDesc, riskValue);
+        updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
    
     // Function to calculate risk based on user profile
-    function calculateRisk() private view returns (uint256) {
-        uint256 baseRisk = user.age / 2;
+    function calculateRisk() public view returns (int256) {
+        int256 baseRisk = user.age / 2;
         if (user.isSmoker) {
             baseRisk *= 3;
         }
@@ -89,12 +128,15 @@ contract Insurance {
         if (user.weight > 100) {
             baseRisk *= 2;
         }
+        for(uint256 i = 0; i < numThirdPartyRisks; i++){
+             baseRisk += thirdPartyRisk[thirdPartyIndexes[i]];
+        }
         return baseRisk;
     }
 
     // Function to calculate premium based on risk
-    function calculatePremium(uint256 risk) private pure returns (uint256) {
+    function calculatePremium(int256 risk) private view returns (int256) {
         // A simplified formula for premium calculation
-        return risk * 10;
+        return risk * 100 + (int256(user.payout/100));
     }
 }
