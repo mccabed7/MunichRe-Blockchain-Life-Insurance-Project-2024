@@ -6,12 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { setSessionID } from './sessionModule.jsx';
 
 
-//let sessionID = null; // Default value
-//export const setSessionID = (newID) => {
-//  sessionID = newID;
-//};
-//export const getSessionID = () => sessionID;
-
 const Registration = () => {
 
     const [isSignUp, setIsSignUp] = useState(true);
@@ -238,7 +232,7 @@ const LoginForm = () => {
             placeholder: "Password",
             errorMessage: "Password must be at least 8 characters, and contain at least one uppercase letter and one special character",
             label: "Password",
-            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+            //pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             required: true
         },
         {
@@ -269,18 +263,22 @@ const LoginForm = () => {
                 'password': values.password
             }
             try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
+                
+                const response = await fetch('/api/login?emailAddress=' + values.email +'&password=' + values.password, {
+                    method: 'GET',
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dataForBackend)
-                });//).then(resp => resp.body);
-                console.log("RESPONSE BODY: " + response.body);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);	
-                }
+                    }
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);	
+                    }
+                    return response.json();})
+                .then(data => {
+                    setSessionID(data);
+                    console.log('Response data:', data)
+                ;});
 
             } catch (error) {
                 console.error('Error:', error);
