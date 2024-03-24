@@ -143,9 +143,6 @@ const RegisterForm = () => {
                     console.log('Response data:', data)
                 ;});
                 
-
-                
-
             } catch (error) {
                 console.error('Error:', error);
             }
