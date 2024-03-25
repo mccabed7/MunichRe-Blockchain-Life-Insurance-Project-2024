@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import RegistrationInput from "./RegistrationInput";
 import { useNavigate } from 'react-router-dom';
+
 import { setSessionID } from './sessionModule.jsx';
+import { setEmail } from './sessionModule.jsx';
 
 
 const Registration = () => {
@@ -125,12 +127,15 @@ const RegisterForm = () => {
                 'email': values.email,
                 'password': values.password
             }
+
+            setEmail(values.email);
             try {
                 const response = await fetch('/api/login?emailAddress=' + values.email, {
                     method: 'POST',
-                    mode: 'cors',
+                    mode: 'cors', 
                     headers: {
                         'Content-Type': 'application/json'
+                        
                     },
                     body: JSON.stringify(dataForBackend)
                 }).then(response => {
@@ -261,6 +266,7 @@ const LoginForm = () => {
             }
             try {
                 
+                setEmail(values.email);
                 const response = await fetch('/api/login?emailAddress=' + values.email +'&password=' + values.password, {
                     method: 'GET',
                     mode: 'cors',
