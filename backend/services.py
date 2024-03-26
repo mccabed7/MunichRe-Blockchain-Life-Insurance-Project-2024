@@ -3,12 +3,22 @@
 import database as db
 import login as users
 import thirdparty as tp
+import blockchain as bc
 # from login import *      #Temporary
 
 # it will be used by main.py
 
 # there should be at least one function for each interactive API endpoint
 
+def get_risk_timeline(email):
+    contract_address = users.get_data(email)
+    if contract_address.startswith("0x"):
+        return bc.get_contract_events(contract_address)
+    else:
+        msg = f"{email} is a {contract_address}"
+        print(msg)
+        return msg
+    
 def get_customer(id, tag='all'):
     try:
         if id == 'all':

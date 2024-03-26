@@ -12,8 +12,18 @@ def main():
   return "hello world!"
 # make similar "pages" that handle get, post, etc. requests to api.
 
+########## TODO change customers endpoint to use blockchain
+
 #This route handles Get and Post requests to the overall database
-@app.route('/api/customers', methods =['GET', 'POST'])        #define /customers endpoint for methods Get and Post
+@app.route('/api/customers/timeline', methods =['GET'])
+def risk_assessment():
+  sid = request.args.get('sid')
+  email = request.args.get('emailAddress')
+  if verify_sid(sid, email):
+    return get_risk_timeline(sid, email), 200
+  return {'error', 'unknown user'}, 400
+
+@app.route('/api/customers', methods=['GET','POST'])  #define /customers endpoint for methods Get and Post
 def customers_Request():
   if request.method == 'GET' :                          #if request is a Get
     return get_customer('all'), 200               # return the database in json format and status code 200(OK)

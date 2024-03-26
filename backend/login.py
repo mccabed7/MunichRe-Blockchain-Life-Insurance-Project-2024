@@ -18,6 +18,11 @@ def attempt_Login(emailAddress, password):
         return password == Users[emailAddress]["password"]
     return False
 
+def get_data(emailAddress):
+    if emailAddress in Users:
+        return Users[emailAddress]['data']
+    return None
+
 def add_Details(emailAddress, signupDetails):
     password = signupDetails.get("password", "")
     index = len(sessions) + 1
