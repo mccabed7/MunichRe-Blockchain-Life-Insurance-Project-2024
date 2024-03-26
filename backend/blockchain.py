@@ -136,9 +136,17 @@ def get_contract_details(contract_address):
 startBlock = 0
 endBlock = 12878196
 def get_contract_events(contract_address):
-    url = f"https://api.etherscan.io/api?module=logs&action=getLogs&address={contract_address}&fromBlock={startBlock}&toBlock={endBlock}&page=1&offset=1000&apikey={ETHERSCAN_API_KEY}"
-    print(requests.get(url).json())
-
+    url = f"https://api-sepolia.etherscan.io/api?module=logs&action=getLogs&address={contract_address}&fromBlock={startBlock}&toBlock={endBlock}&page=1&offset=1000&apikey={ETHERSCAN_API_KEY}"
+    events = requests.get(url).json().get('result', [])
+    # 'timeStamp' 'data'
+    risk_timeline = []
+    for e in events:
+        timestamp = int(e['timeStamp'], 16) # time.ctime() to turn to string
+        risk = int(e['data'], 16)
+        risk_timeline.append((timestamp,risk))
+    risk_timeline.sort(key=lambda x : x[0], reverse=True)
+    print(risk_timeline)
+    return risk_timeline
 
 if __name__=="__main__":
     # get_contract_abi()
