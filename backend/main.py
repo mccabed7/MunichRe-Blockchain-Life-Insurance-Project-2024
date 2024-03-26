@@ -84,7 +84,7 @@ def login_to_Account():
   #Delete request, assuming we don't want to keep tag
   #Url should be in the form /api/login?emailAddress=x    where x is email Address to delete
   elif request.method == 'DELETE':
-    sid = None
+    sid = arguments.get("sid", "")
     if emailAddress in users.Users:
       sid = users.search_Sessions(emailAddress)
       return delete_user(sid, emailAddress), 204
@@ -93,7 +93,7 @@ def login_to_Account():
   #Put request used for modifying User password
   #Url should be in form /api/login?emailAddress=x&newPassword=y
   elif request.method == 'PUT':
-    sid = None
+    sid = arguments.get("sid", "")
     if emailAddress in users.Users:
       sid = users.search_Sessions(emailAddress)
       result = change_password(sid, emailAddress, arguments)
@@ -104,8 +104,23 @@ def login_to_Account():
         return result, 200
     else:
       return {'error': 'invalid email address'}, 400
-     
-  
+
+@app.route('/api/third-party', methods=['GET', 'POST'])
+def apply_for_access():
+  arguments = request.args
+  email = arguments.get('emailAddress', '')
+  if request.method=='GET':
+    sid = arguments.get('sid', '')
+    result = verify_sid(sid, email)
+    if result == None:
+      return {'error': 'access restricted'}, 403
+  elif request.method=='POST':
+    password = arguments.get('password', None)
+    if email!='' and password!=None:
+      pass 
+    else:
+      return {'error': 'unable to determine password/email'}, 400
+
 
 if __name__ == '__main__':
   app.run()
