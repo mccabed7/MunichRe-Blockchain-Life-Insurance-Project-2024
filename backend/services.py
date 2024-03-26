@@ -2,6 +2,7 @@
 # it will also call many helper functions in those files
 import database as db
 import login as users
+import thirdparty as tp
 # from login import *      #Temporary
 
 # it will be used by main.py
@@ -77,3 +78,10 @@ def login(email, password):
 # bool
 def verify_sid(sid, email):
     return users.check_Session_id(sid, email)
+
+def third_party_application(email, password, message=""):
+    apply = (email, password, message)
+    tp.store_application(apply)
+
+def get_pending_applications():
+    return tp.applications
