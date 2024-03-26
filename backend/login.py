@@ -6,11 +6,11 @@ sessions = {
 }
 
 # key value is email
-# contains dictonary with 'password' and 'data' (which containes contract address or None)
+# contains dictonary with 'password' and 'data' (which containes contract address, admin or third-party)
 Users = {
-    # 'jameshumphrey@gmail.com' : {'password' : '6795', 'data' : 0x2385902745982759}, 
-    # 'emmapart@gmail.com' : {'password' : 'password123', 'data' : 2},
-    # 'thrid@party.com' : {'password' : 'asdfghjk', 'data' : None}
+    'jameshumphrey@gmail.com' : {'password' : '6795', 'data' : '0xF7e841C6613cE6B19A5eb11ae74255115e6c6318'}, 
+    'emmapart@gmail.com' : {'password' : 'password123', 'data' : 'admin'},
+    'thrid@party.com' : {'password' : 'asdfghjk', 'data' : 'thrid-party'}
 }
 
 def attempt_Login(emailAddress, password):
