@@ -83,5 +83,6 @@ def third_party_application(email, password, message=""):
     apply = (email, password, message)
     tp.store_application(apply)
 
-def get_pending_applications():
-    return tp.applications
+def get_pending_applications(sid, email):
+    if verify_sid(sid, email) and users.Users[email]["data"] == "admin":
+        return tp.applications
