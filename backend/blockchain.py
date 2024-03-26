@@ -2,6 +2,7 @@ from web3 import Web3 # requires you to run `pip install web3`
 # import os
 import subprocess as sp
 import json
+import requests
 import time
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
@@ -131,10 +132,19 @@ def get_contract_details(contract_address):
   except Exception as e:
     print(f"Error calling function: {e}")
 
+
+startBlock = 0
+endBlock = 12878196
+def get_contract_events(contract_address):
+    url = f"https://api.etherscan.io/api?module=logs&action=getLogs&address={contract_address}&fromBlock={startBlock}&toBlock={endBlock}&page=1&offset=1000&apikey={ETHERSCAN_API_KEY}"
+    print(requests.get(url).json())
+
+
 if __name__=="__main__":
     # get_contract_abi()
     
     # example()
-    list_abi_functions()
-    get_contract_details(CONTRACT_ADDRESS)
+    # list_abi_functions()
+    # get_contract_details(CONTRACT_ADDRESS)
+    get_contract_events(CONTRACT_ADDRESS)
 

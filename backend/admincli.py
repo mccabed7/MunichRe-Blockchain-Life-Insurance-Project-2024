@@ -10,4 +10,7 @@ if __name__=="__main__":
   sid = requests.get( f"{localhost}/api/login", params={'emailAddress': email, 'password' : password})
   print(sid)
   resp = requests.get(f"{localhost}/api/third-party", params={'emailAddress': email, 'sid' : sid})
-  print(resp)
+  print(resp.json())
+
+  input()
+
