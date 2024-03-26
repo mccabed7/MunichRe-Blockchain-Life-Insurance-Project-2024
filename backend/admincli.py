@@ -2,10 +2,12 @@
 import requests
 # auto fetch and select pending third party to approve
 
-api = "https://localhost:5000/api/"
+localhost = "http://127.0.0.1:5000"
 email = "emmapart@gmail.com"
 password = "password123"
 
 if __name__=="__main__":
-  response = requests.get(api + "login")
-  print(response)
+  sid = requests.get( f"{localhost}/api/login", params={'emailAddress': email, 'password' : password})
+  print(sid)
+  resp = requests.get(f"{localhost}/api/third-party", params={'emailAddress': email, 'sid' : sid})
+  print(resp)

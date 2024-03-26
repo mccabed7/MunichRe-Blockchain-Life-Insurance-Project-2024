@@ -10,7 +10,7 @@ sessions = {
 Users = {
     'jameshumphrey@gmail.com' : {'password' : '6795', 'data' : '0xF7e841C6613cE6B19A5eb11ae74255115e6c6318'}, 
     'emmapart@gmail.com' : {'password' : 'password123', 'data' : 'admin'},
-    'thrid@party.com' : {'password' : 'asdfghjk', 'data' : 'thrid-party'}
+    'third@party.com' : {'password' : 'asdfghjk', 'data' : 'third-party'}
 }
 
 def attempt_Login(emailAddress, password):

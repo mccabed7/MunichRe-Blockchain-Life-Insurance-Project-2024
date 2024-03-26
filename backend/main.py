@@ -59,6 +59,7 @@ def update_Customer(id):
 def login_to_Account():
   arguments = request.args
   emailAddress = arguments.get("emailAddress", "")
+  print(emailAddress)
   #sid = arguments.get()
   #for POST request, url must be /api/login?emailAddress=x
   #where x is email address to be used to sign up
@@ -76,7 +77,7 @@ def login_to_Account():
       password = arguments.get("password", "")
       result = login(emailAddress, password)
       if result == None:
-        return {'error' : 'Your password is incorrect'}, 400
+        return {'error' : 'Your password is incorrect'}, 403
       else:
         return jsonify(result), 200    #Placeholder, unsure of what to do upon success
     else:
@@ -114,6 +115,7 @@ def apply_for_access():
     result = verify_sid(sid, email)
     if result == None:
       return {'error': 'access restricted'}, 403
+    return get_pending_applications(sid, email)
   elif request.method=='POST':
     password = arguments.get('password', None)
     if email!='' and password!=None:
