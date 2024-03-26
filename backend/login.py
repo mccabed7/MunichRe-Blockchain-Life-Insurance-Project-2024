@@ -44,7 +44,7 @@ def generate_Session_id():
 def add_Session_id(emailAddress):
     sessionId = generate_Session_id() 
     # TODO store a timestamp in future for removing old sessions
-    sessions[sessionId] = emailAddress # no need to store another nested dictionary
+    sessions[str(sessionId)] = emailAddress # no need to store another nested dictionary
     return sessionId
 
 def search_Sessions(emailAddress):       #function to search for key tied to email, temporary function
@@ -54,7 +54,8 @@ def search_Sessions(emailAddress):       #function to search for key tied to ema
         
 
 def check_Session_id(sid, email):
-    if sessions[sid] == email:
-        return True
-    return False
+    print(sessions)
+    check = sessions.get(sid, None)
+    return check!=None and check == email
+
 # currently no check to clean sessions

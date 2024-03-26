@@ -115,11 +115,11 @@ def apply_for_access():
     result = verify_sid(sid, email)
     if result == None:
       return {'error': 'access restricted'}, 403
-    return get_pending_applications(sid, email)
+    return get_pending_applications(sid, email), 200
   elif request.method=='POST':
     password = arguments.get('password', None)
     if email!='' and password!=None:
-      pass 
+      pass
     else:
       return {'error': 'unable to determine password/email'}, 400
 
