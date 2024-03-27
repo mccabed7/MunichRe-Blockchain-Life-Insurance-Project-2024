@@ -5,8 +5,8 @@
   }
   
   .about-us h1 {
-    font-size: 50px; /* Increase font size */
-    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2); /* Add slight drop shadow */
+    font-size: 50px; 
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2); 
   }
   
   .about-us p {
@@ -24,13 +24,13 @@
   .row {
     display: flex;
     justify-content: center;
-    margin-bottom: 40px; /* Add space between rows */
+    margin-bottom: 40px;
   }
   
   .member {
-    flex: 0 0 calc(30% - 40px); /* Set the width of each member to one-third minus margins */
-    margin: 0 0px; /* Add space between members */
-    text-align: center; /* Center content */
+    flex: 0 0 calc(30% - 40px); 
+    margin: 0 0px;
+    text-align: center;
   }
   
   .member img {
@@ -41,7 +41,7 @@
   }
   
   .member p {
-    color: #b0a2ff; /* Baby purple color */
+    color: #b0a2ff; 
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   }
   
