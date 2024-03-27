@@ -1,0 +1,51 @@
+
+.about-us {
+    text-align: center;
+    color: #b0a2ff;
+  }
+  
+  .about-us h1 {
+    font-size: 50px; /* Increase font size */
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2); /* Add slight drop shadow */
+  }
+  
+  .about-us p {
+    margin:50px;
+    font-size: 22px;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); 
+  }
+  
+  
+  .team-members {
+    margin-top: 50px;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px; /* Add space between rows */
+  }
+  
+  .member {
+    flex: 0 0 calc(30% - 40px); /* Set the width of each member to one-third minus margins */
+    margin: 0 0px; /* Add space between members */
+    text-align: center; /* Center content */
+  }
+  
+  .member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .member p {
+    color: #b0a2ff; /* Baby purple color */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .member h2 {
+    color:white;
+  }
+  
