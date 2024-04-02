@@ -48,11 +48,67 @@ class Timeline extends Component{
 export default Timeline;
 */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Chart } from 'react-google-charts';
 
+import {getSessionID, getEmail} from './sessionModule.jsx';
+let sessionID = null;
+let email = null;
 
-const Timeline = () => {
+const Timeline = () =>{
+    const [timelinePoints, setTimelinePoints] = useState([]);
+    
+
+    const params = new URLSearchParams({
+      'sid': sessionID,
+      'emailAddress': email
+    });
+    
+    useEffect(() => {
+      async function fetchData() {
+        const sessionID = getSessionID();
+        const email = getEmail();
+        const params = new URLSearchParams({
+          'sid': sessionID,
+          'emailAddress': email
+        });
+  
+        try {
+          const response = await fetch(`/api/customers/timeline?${params.toString()}`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const data = await response.json();
+          console.log(data);
+          setTimelinePoints(data); // Assume data is in the correct format
+          //setIsLoading(false);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+  
+      fetchData();
+    }, []);
+
+    const formattedTimelinePoints = timelinePoints.map((point, index) => {
+      // Assuming the first element of each point is a timestamp or an incident ID
+      const incidentNo = `Incident ${index + 1}`;
+      // The second element is the risk score
+      const riskScore = point[1];
+    
+      return [incidentNo, riskScore];
+    });
+
+    console.log(timelinePoints);
+
     return (
     
         <Chart
@@ -63,11 +119,7 @@ const Timeline = () => {
         loader={<div>Loading Chart</div>}
         data={[
           ['Incident No', 'Risk Score'],
-          ['1', 8008000],
-          ['2', 3694000],
-          ['3', 2896000],
-          ['4', 1953000],
-          ['5', 1517000],
+          ...formattedTimelinePoints,
         ]}
         options={{
           title: 'Risk Timeline',
