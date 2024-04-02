@@ -23,7 +23,6 @@ if __name__=="__main__":
     print(applications[i])
 # and select them and send them back to the api for approval
 # where the approved get added to Users
-   #Could create an array with an index to the tuple and a default false value for approval, approve using
-    #a put request to change value to true.
   index = input("choose application to approve (index)")
+  response = requests.post(f"{localhost}/api/approval", params={'emailAddress': email, 'sid' : sid}, data=f"{index}")
 # you will need to change login.py for that.

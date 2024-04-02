@@ -19,8 +19,9 @@ def main():
 def risk_assessment():
   sid = request.args.get('sid')
   email = request.args.get('emailAddress')
-  if verify_sid(sid, email):
-    return get_risk_timeline(sid, email), 200
+  data = verify_sid(sid, email)
+  if data != None:
+    return get_risk_timeline(data), 200
   return {'error', 'unknown user'}, 400
 
 @app.route('/api/customers', methods=['GET','POST'])  #define /customers endpoint for methods Get and Post
@@ -136,8 +137,19 @@ def apply_for_access():
     
 @app.route('/api/approval', methods=['POST'])
 def approve_application():
-    if request.method == 'POST':
-      pass
+  arguments = request.args
+  email = arguments.get('emailAddress', '')
+  if request.method == 'POST':
+    sid = arguments.get('sid', '')
+    data = verify_sid(sid, email)
+    if data!=None:
+      index = int(request.get_data().decode())
+      if data=="admin":
+        if approve_third_party(index):
+          return "sucess", 201
+        return {'error': 'access restricted'}, 403
+  
+  return "", 400
 #Have an array maybe linking applications and a boolean true or false/0 or 1
 
 

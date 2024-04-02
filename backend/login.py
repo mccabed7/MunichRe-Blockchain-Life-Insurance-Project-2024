@@ -23,10 +23,8 @@ def get_data(emailAddress):
         return Users[emailAddress]['data']
     return None
 
-def add_Details(emailAddress, signupDetails):
-    password = signupDetails.get("password", "")
-    index = len(sessions) + 1
-    Users[emailAddress] = {"password" : password, "data" : index}  
+def add_Details(emailAddress, password, data):
+    Users[emailAddress] = {"password" : password, "data" : data}  
     sid = add_Session_id(emailAddress)
     return sid
 
@@ -61,6 +59,8 @@ def search_Sessions(emailAddress):       #function to search for key tied to ema
 def check_Session_id(sid, email):
     print(sessions)
     check = sessions.get(sid, None)
-    return check!=None and check == email
+    if check!=None and check == email:
+        return get_data(email)
+    return None
 
 # currently no check to clean sessions

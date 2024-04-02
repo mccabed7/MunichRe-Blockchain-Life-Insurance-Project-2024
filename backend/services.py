@@ -10,12 +10,11 @@ import blockchain as bc
 
 # there should be at least one function for each interactive API endpoint
 
-def get_risk_timeline(email):
-    contract_address = users.get_data(email)
+def get_risk_timeline(contract_address):
     if contract_address.startswith("0x"):
         return bc.get_contract_events(contract_address)
     else:
-        msg = f"{email} is a {contract_address}"
+        msg = f"data is not a {contract_address}"
         print(msg)
         return msg
     
@@ -64,8 +63,8 @@ def customer_delete(id, tag='all'):
 ##  
 
 def add_user(email, password):
-    # create customer
-    result = users.add_Details(email, password)
+    # create customer TODO deploy smart contract
+    result = users.add_Details(email, password, "")
     if result != None:
         return login(email, password)
     return result
@@ -85,13 +84,18 @@ def login(email, password):
         return users.add_Session_id(email)
     return None
 
-# bool
+# returns 'data'
 def verify_sid(sid, email):
     return users.check_Session_id(sid, email)
 
 def make_third_party_application(email, password, message=""):
     apply = (email, password, message)
     tp.store_application(apply)
+
+def approve_third_party(index):
+    email, password, _ = tp.applications[index]
+    users.add_Details(email, password, "third-party")
+    print(users.Users)
 
 def get_pending_applications(sid, email):
     if verify_sid(sid, email) and users.Users[email]["data"] == "admin":
