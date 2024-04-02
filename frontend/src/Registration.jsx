@@ -280,7 +280,6 @@ const LoginForm = () => {
                     return response.json();})
                 .then(data => {
                     setSessionID(data);
-                    console.log('Response data:', data)
                 ;});
 
             } catch (error) {
