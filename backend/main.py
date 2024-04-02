@@ -129,9 +129,17 @@ def apply_for_access():
   elif request.method=='POST':
     password = arguments.get('password', None)
     if email!='' and password!=None:
-      pass
+      make_third_party_application(email, password, arguments.get('msg', ''))
+      return "success", 201
     else:
       return {'error': 'unable to determine password/email'}, 400
+    
+@app.route('/api/approval', methods=['POST'])
+def approve_application():
+    if request.method == 'POST':
+      pass
+#Have an array maybe linking applications and a boolean true or false/0 or 1
+
 
 
 if __name__ == '__main__':

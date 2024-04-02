@@ -89,7 +89,7 @@ def login(email, password):
 def verify_sid(sid, email):
     return users.check_Session_id(sid, email)
 
-def third_party_application(email, password, message=""):
+def make_third_party_application(email, password, message=""):
     apply = (email, password, message)
     tp.store_application(apply)
 
