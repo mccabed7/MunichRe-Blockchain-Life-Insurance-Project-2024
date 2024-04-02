@@ -39,9 +39,9 @@ def modify_Password(emailAddress, arguments):
     return Users[emailAddress][password]
 
 def generate_Session_id():
-    sessionId = random.randint(1, 2**128)
+    sessionId = f'{random.randint(1, 2**128):x}'
     while sessionId in sessions:
-        sessionId = random.randint(1, 2**128)
+        sessionId = f'{random.randint(1, 2**128):x}'
     return sessionId
 
 def add_Session_id(emailAddress):
