@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract Insurance {
     struct UserInfo {
         string userName;
-        //address userAddress;
+        address userAddress;
         bool isSmoker;
         bool goesToGym;
         uint256 weight; // in kilograms
@@ -14,18 +14,17 @@ contract Insurance {
         uint256 contractCreationDate;
         uint256 contractAnullment;
         uint256 nextPaymentDate;
-        
+        string[] riskDescriptions;
+        int256[] riskValues;
+        uint256 numThirdPartyRisks;        
     }
-    //cant place a mapping inside of a struct
-    mapping(string => int256) thirdPartyRisk;
-    //this is a space expensive implementation but is the only way to loop through a mapping
-    //if we can get rid of mappings and just save the risks 
-    mapping(uint256 => string) thirdPartyIndexes;
-    uint256 private numThirdPartyRisks = 0;
     address private owner;
     UserInfo user;
+    //Logs event of risk after recalculation
     event RiskUpdated(int256 newRisk);
+    //Logs event of premium updated after recalculation
     event PremiumUpdated(int256 newPremium);
+    //Logs event of added third party risk descriptions and values
     event newThirdPartyRisk(string riskDescription, int256 newRiskValue);
     constructor(
         string memory newUser,
@@ -35,12 +34,12 @@ contract Insurance {
         int256 userAge,
         uint256 valuePayout,
         int256 InitialPremium, 
-        //address newUserAddress,
-        uint256 anullmentDate
+        address newUserAddress,
+        uint256 anullmentDate   
     ) {
         owner = msg.sender;
         user = UserInfo({
-            //userAddress : newUserAddress,
+            userAddress : newUserAddress,
             userName: newUser,
             isSmoker: smokerStatus,
             goesToGym: gymStatus,
@@ -50,7 +49,10 @@ contract Insurance {
             premium: InitialPremium,
             contractCreationDate: block.timestamp,
             contractAnullment: block.timestamp + (anullmentDate * 1 days),
-            nextPaymentDate: block.timestamp + 30 days
+            nextPaymentDate: block.timestamp + 30 days,
+            riskDescriptions : new string[](0),
+            riskValues : new int[](0),
+            numThirdPartyRisks : 0
         });
     }
     //function to set users smoker status and update existing risk
@@ -73,7 +75,6 @@ contract Insurance {
         user.age = newAge;
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
     }
-    
 
     // Function to update risk profile and premium based on user inputs
     function updateProfile(
@@ -107,13 +108,20 @@ contract Insurance {
     function getUserProfile() public view returns (UserInfo memory) {
         return user;
     }
-    //function that takes in some new risk assessment from a third party and adds it to modify the existing risk
-    function addThirdPartyData(string memory riskDesc, int256 riskValue) public {
-        thirdPartyRisk[riskDesc] = riskValue;
-        thirdPartyIndexes[numThirdPartyRisks] = riskDesc;
-        numThirdPartyRisks++;
-        emit newThirdPartyRisk(riskDesc, riskValue);
+    //function that takes in some risk assessments from a third party and adds it as new third party risks
+    function addThirdPartyData(string[] calldata riskDesc, int256[] calldata riskValue) public returns (int256){
+        uint riskLength = riskDesc.length;
+        if(riskLength != riskValue.length){
+            return 0;
+        }
+        for(uint256 i = 0; i < riskLength; i++){
+            user.riskValues.push(riskValue[i]);
+            user.riskDescriptions.push(riskDesc[i]);
+            emit newThirdPartyRisk(riskDesc[i], riskValue[i]);
+        }
+        user.numThirdPartyRisks += riskLength;
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+        return 1;
     }
    
     // Function to calculate risk based on user profile
@@ -128,8 +136,8 @@ contract Insurance {
         if (user.weight > 100) {
             baseRisk *= 2;
         }
-        for(uint256 i = 0; i < numThirdPartyRisks; i++){
-             baseRisk += thirdPartyRisk[thirdPartyIndexes[i]];
+        for(uint256 i = 0; i < user.numThirdPartyRisks; i++){
+             baseRisk += user.riskValues[i];
         }
         return baseRisk;
     }
