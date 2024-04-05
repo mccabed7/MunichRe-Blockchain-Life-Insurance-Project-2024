@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract Insurance {
     struct UserInfo {
         string userName;
-        address userAddress;
+        // address userAddress;
         bool isSmoker;
         bool goesToGym;
         uint256 weight; // in kilograms
@@ -14,9 +14,22 @@ contract Insurance {
         uint256 contractCreationDate;
         uint256 contractAnullment;
         uint256 nextPaymentDate;
-        string[] riskDescriptions;
-        int256[] riskValues;
+        // string[] riskDescriptions;
+        // int256[] riskValues;
         uint256 numThirdPartyRisks;        
+    }
+    enum varId {
+        userName,
+        isSmoker,
+        goesToGym,
+        weight,
+        age,
+        payout,
+        premium,
+        contractCreationDate,
+        contractAnullment,
+        nextPaymentDate,
+        numThirdPartyRisks
     }
     address private owner;
     UserInfo user;
@@ -34,12 +47,12 @@ contract Insurance {
         int256 userAge,
         uint256 valuePayout,
         int256 InitialPremium, 
-        address newUserAddress,
+        // address newUserAddress,
         uint256 anullmentDate   
     ) {
         owner = msg.sender;
         user = UserInfo({
-            userAddress : newUserAddress,
+            // userAddress : newUserAddress,
             userName: newUser,
             isSmoker: smokerStatus,
             goesToGym: gymStatus,
@@ -50,8 +63,8 @@ contract Insurance {
             contractCreationDate: block.timestamp,
             contractAnullment: block.timestamp + (anullmentDate * 1 days),
             nextPaymentDate: block.timestamp + 30 days,
-            riskDescriptions : new string[](0),
-            riskValues : new int[](0),
+            // riskDescriptions : new string[](0),
+            // riskValues : new int[](0),
             numThirdPartyRisks : 0
         });
     }
@@ -74,6 +87,73 @@ contract Insurance {
     function setNewAge(int256 newAge) public{
         user.age = newAge;
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
+    }
+
+    function updateEvent(uint[] calldata kargs, uint nargs) public returns (string memory) {
+        require(msg.sender == owner, "Only the contract owner can update the profile.");
+
+        for (uint i = 0; i<nargs ; i++) {
+            if (kargs[i] == varId.userName) {
+                user.userName = kargs[++i];
+            }
+            else if (kargs[i] == varId.isSmoker) {
+                user.isSmoker = kargs[++i];
+            }
+            else if (kargs[i] == varId.goesToGym) {
+                user.goesToGym = kargs[++i];
+            }
+            else if (kargs[i] == varId.weight) {
+                user.weight = kargs[++i];
+            }
+            else if (kargs[i] == varId.age) {
+                user.age = kargs[++i];
+            }
+            else if (kargs[i] == varId.payout) {
+                user.payout = kargs[++i];
+            }
+            else if (kargs[i] == varId.premium) {
+                user.premium = kargs[++i];
+            }
+            else if (kargs[i] == varId.contractCreationDate) {
+                user.contractCreationDate = kargs[++i];
+            }
+            else if (kargs[i] == varId.contractAnullment) {
+                user.contractAnullment = kargs[++i];
+            }
+            else if (kargs[i] == varId.nextPaymentDate) {
+                user.nextPaymentDate = kargs[++i];
+            }
+            else if (kargs[i] == varId.riskDescriptions) {
+                user.riskDescriptions = kargs[++i];
+            }
+            else if (kargs[i] == varId.riskValues) {
+                user.riskValues = kargs[++i];
+            }
+            else if (kargs[i] == varId.numThirdPartyRisks) {
+                user.numThirdPartyRisks = kargs[++i];
+            }
+        }
+        int256 risk = calculateRisk();
+        emit RiskUpdated(risk);
+        return "Success";
+    }
+
+    function stringToUint(string calldata s) internal returns(uint256, bool) 
+    {
+        bytes memory b = bytes(s);
+        uint result = 0;
+        bool success = false;
+        for (uint i = 0; i < b.length; i++) { 
+            if (b[i] >= 0x30 && b[i] <= 0x39) {
+                result = result * 10 + (uint8(b[i]) - 0x30); 
+                success = true;
+            } else {
+                result = 0;
+                success = false;
+                break;
+            }
+        } 
+        return (result, success);
     }
 
     // Function to update risk profile and premium based on user inputs
@@ -100,7 +180,7 @@ contract Insurance {
 
         // Emit events for updated risk and premium
         emit RiskUpdated(newRisk);
-        emit PremiumUpdated(newPremium);
+        // emit PremiumUpdated(newPremium);
 
         return "Profile updated successfully.";
     }
@@ -136,9 +216,9 @@ contract Insurance {
         if (user.weight > 100) {
             baseRisk *= 2;
         }
-        for(uint256 i = 0; i < user.numThirdPartyRisks; i++){
-             baseRisk += user.riskValues[i];
-        }
+        // for(uint256 i = 0; i < user.numThirdPartyRisks; i++){
+        //      baseRisk += user.riskValues[i];
+        // }
         return baseRisk;
     }
 
