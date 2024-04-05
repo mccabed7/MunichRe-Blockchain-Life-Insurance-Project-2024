@@ -1,11 +1,10 @@
 from web3 import Web3 # requires you to run `pip install web3`
 import os
-import fnmatch
 import subprocess as sp
 import json
 import requests
 import time
-from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
+from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY, CREATOR_ADDRESS # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
 project_root_folder = os.path.dirname(os.path.dirname(__file__))
 
@@ -14,15 +13,10 @@ contract_path = project_root_folder + "/Blockchain/artifacts/contracts/userContr
 
 USER_CONTRACT_ABI = json.load(open(contract_path))['abi']
 
-# Address calling the functions/signing transactions
-CALLER_ADDRESS = "0x199731A10c9173b1f141C0515ea79238d75824B5"  # Ethereum PUBLIC address from MetaMask wallet (Testnet Account)
-
-# Contract address for which you want to get the ABI
-CONTRACT_ADDRESS = "0xF7e841C6613cE6B19A5eb11ae74255115e6c6318" # CONTRACT_ADDRESS -  Deployed contracts tab in Remix
-
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
+
 def check_connection():
   # Verify if the connection is successful
   if web3.is_connected():
@@ -56,7 +50,6 @@ def check_connection():
 def deploy():
     # requires hardhat installed, `npm install hardhat`
     # and existing compiled contract (do this with `npx hardhat compile`)
-    # need to update the USER_CONTRACT_ABI after compiling
 
     result = sp.run(args=["npx", "hardhat", "run", "scripts/deploy.js", "--network", "sepolia"], cwd=project_root_folder+"/Blockchain", capture_output=True, text=True)
     print(result.stderr)
@@ -120,7 +113,7 @@ def list_abi_functions():
       print("The ABI was not parsed into a list as expected.")
 
 def get_contract_details(contract_address):
-  nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
+  nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
   # Then use the parsed ABI to create the contract instance
   contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
@@ -159,8 +152,8 @@ if __name__=="__main__":
     # get_contract_abi()
     
     # example()
-    # list_abi_functions()
+    list_abi_functions()
     # get_contract_details(CONTRACT_ADDRESS)
     # get_contract_events(CONTRACT_ADDRESS)
-    print(deploy())
+    # print(deploy())
     pass

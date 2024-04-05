@@ -1,9 +1,13 @@
 # Backend Team
 
+This README is for launching your own API
+
 ## Setup
-We require that you have <b>python</b> installed
+We require that you have <b>python</b> and <b>nodejs</b> installed
 
 https://www.python.org/downloads/
+
+https://nodejs.org/en/download/ 
 
 <br>
 
@@ -11,37 +15,44 @@ We use flask to provide the API endpoints.
 
 This may require you to run
 ```
-pip install flask
+pip install flask web3
 ```
 on your device.
 
-The API can be launched with 
+
+## API
+
+Before the API can be launched, you neeed to create a `secret.py` file inside of the backend and include
+```
+# https://docs.etherscan.io/getting-started/viewing-api-usage-statistics
+ETHERSCAN_API_KEY = ''
+
+# https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key
+ALCHEMY_API_KEY = ''
+
+# not necessary
+# Ethereum PUBLIC address from MetaMask wallet (Testnet Account)
+CREATOR_ADDRESS = ''
+```
+
+And create a `.env` file inside of the Blockchain and include
+```
+# https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key
+API_URL = "https://eth-sepolia.g.alchemy.com/v2/"
+
+# Metamask wallet
+PRIVATE_KEY = "241548e811c77fa4160d7916062a53fa680b349725591ebfe54d946d721dacc4"
+```
+
+and you need to run
+```
+npm install &&
+npx hardhat compile
+```
+inside the Blockchain folder.
+
+The API can finally be launched with 
 ```
 python3 main.py
 ```
 
-## API
-
-to begin to use the api we require you login through `https://localhost:5000/api/login`
-
-make a https POST with `emailAddress` and `password` parameters to register
-
-and GET with the same parameters to login.
-
-you will be returned a session id (to put in a `sid` paramter) which you need with emailAddress to use other endpoints of the api.
-
-`https://localhost:5000/api/customers` will deploy a smart contract when you make a POST request provided with sid, and email headers, and a json body.
-
-
-
-PUT requests lets you make changes to your smart contract.
-
-GET requests will fetch your risk assesment timeline.
-
-
-## Third-Party
-
-`https://localhost:5000/api/third-party` POST requests with email and password parameters, and a body of text will create an application for manual review.
-
-(unimplemented)
-email third party of approval or rejection.

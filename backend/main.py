@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify # may require you to run `pip install flask` on your machine
-from flask_cors import CORS, cross_origin # `pip install -U flask-cors`
+from flask_cors import CORS # `pip install -U flask-cors`
 from services import *
 
 app = Flask(__name__)
