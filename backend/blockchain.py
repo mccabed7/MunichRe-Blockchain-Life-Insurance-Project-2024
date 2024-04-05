@@ -7,13 +7,12 @@ import requests
 import time
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
+project_root_folder = os.path.dirname(os.path.dirname(__file__))
 
 # USER_CONTRACT_ABI = abi = [{ "inputs": [{ "internalType": "bool", "name": "newSmokerStatus", "type": "bool" }, { "internalType": "bool", "name": "newGymStatus", "type": "bool" }, { "internalType": "uint256", "name": "newWeight", "type": "uint256" }, { "internalType": "uint256", "name": "newAge", "type": "uint256" }], "name": "updateProfile", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getUserProfile", "outputs": [{ "components": [{ "internalType": "string", "name": "userName", "type": "string" }, { "internalType": "bool", "name": "isSmoker", "type": "bool" }, { "internalType": "bool", "name": "goesToGym", "type": "bool" }, { "internalType": "uint256", "name": "weight", "type": "uint256" }, { "internalType": "uint256", "name": "age", "type": "uint256" }, { "internalType": "uint256", "name": "payout", "type": "uint256" }, { "internalType": "uint256", "name": "premium", "type": "uint256" }, { "internalType": "uint256", "name": "contractCreationDate", "type": "uint256" }, { "internalType": "uint256", "name": "contractAnullment", "type": "uint256" }, { "internalType": "uint256", "name": "nextPaymentDate", "type": "uint256" }], "internalType": "struct Insurance.UserProfile", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "premiumPaid", "type": "bool" }], "name": "verifyPremiumPayment", "outputs": [], "stateMutability": "nonpayable", "type": "function" }]
-contract_path = os.path.dirname(os.path.dirname(__file__)) + "/Blockchain/artifacts/contracts/userContract.sol/Insurance.json"
+contract_path = project_root_folder + "/Blockchain/artifacts/contracts/userContract.sol/Insurance.json"
 
 USER_CONTRACT_ABI = json.load(open(contract_path))['abi']
-
-print(USER_CONTRACT_ABI)
 
 # Address calling the functions/signing transactions
 CALLER_ADDRESS = "0x199731A10c9173b1f141C0515ea79238d75824B5"  # Ethereum PUBLIC address from MetaMask wallet (Testnet Account)
@@ -58,8 +57,10 @@ def deploy():
     # requires hardhat installed, `npm install hardhat`
     # and existing compiled contract (do this with `npx hardhat compile`)
     # need to update the USER_CONTRACT_ABI after compiling
-    cont_addr = sp.run(["npx", "hardhat", "run", "deployments/deploy.js", "--network sepolia"], capture_output=True)
-    cont_addr = cont_addr.remove_prefix("Contract Deployed to Address: ")
+
+    result = sp.run(args=["npx", "hardhat", "run", "scripts/deploy.js", "--network", "sepolia"], cwd=project_root_folder+"/Blockchain", capture_output=True, text=True)
+    print(result.stderr)
+    cont_addr = result.stdout.removeprefix("Contract Deployed to Address: ")
     return cont_addr
 
 def example():
@@ -161,5 +162,5 @@ if __name__=="__main__":
     # list_abi_functions()
     # get_contract_details(CONTRACT_ADDRESS)
     # get_contract_events(CONTRACT_ADDRESS)
-    # print(deploy())
+    print(deploy())
     pass
