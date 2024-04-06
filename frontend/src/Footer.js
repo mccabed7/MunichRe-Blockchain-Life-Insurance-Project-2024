@@ -7,9 +7,13 @@ const Footer = () => {
             <footerBox>
                 <row>
                     <column>
+                        <Link to= '/landingpage'>
+                        <a href= '#'>
                         <heading>
                             SmartAssurance
                         </heading>
+                        </a>
+                        </Link>
                     </column>
                     <column>
                         <Link to= '/aboutus'>
