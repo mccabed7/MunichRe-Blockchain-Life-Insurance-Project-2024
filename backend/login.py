@@ -24,13 +24,15 @@ def get_data(emailAddress):
     return None
 
 def add_Details(emailAddress, password, data):
+    password = password.get("password", "")
     Users[emailAddress] = {"password" : password, "data" : data}  
     sid = add_Session_id(emailAddress)
     return sid
 
 def delete_Details(sid, emailAddress):
-    if check_Session_id(sid, emailAddress):
-        return Users.pop(emailAddress)
+    if check_Session_id(sid, emailAddress) != None:
+        del Users[emailAddress]
+        return 
 
 def modify_Password(emailAddress, arguments):
     newPassword = arguments.get("newPassword", "")
@@ -57,10 +59,9 @@ def search_Sessions(emailAddress):       #function to search for key tied to ema
         
 
 def check_Session_id(sid, email):
-    print(sessions)
-    check = sessions.get(sid, None)
+    check = sessions.get(sid, email)
     if check!=None and check == email:
-        return get_data(email)
+        return check
     return None
 
 # currently no check to clean sessions

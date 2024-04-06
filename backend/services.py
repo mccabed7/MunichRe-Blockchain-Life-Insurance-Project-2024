@@ -70,7 +70,7 @@ def add_user(email, password):
     return result
 
 def delete_user(sid, email):
-    if verify_sid(sid, email):
+    if verify_sid(sid, email) == email:
         return users.delete_Details(sid, email)
     return None
 

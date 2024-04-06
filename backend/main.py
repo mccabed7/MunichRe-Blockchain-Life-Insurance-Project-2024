@@ -99,7 +99,8 @@ def login_to_Account():
     sid = arguments.get("sid", "")
     if emailAddress in users.Users:
       sid = users.search_Sessions(emailAddress)
-      return delete_user(sid, emailAddress), 204
+      delete_user(sid, emailAddress)
+      return "Deletion successful", 204
     else: 
       return {'error': 'invalid email address'}, 400  
   #Put request used for modifying User password
