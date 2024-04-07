@@ -4,19 +4,25 @@ pragma solidity ^0.8.0;
 contract Insurance {
     struct UserInfo {
         string userName;
-        // address userAddress;
         bool isSmoker;
         bool goesToGym;
         uint256 weight; // in kilograms
-        int256 age;
+        uint256 age;
         uint256 payout;
-        int256 premium;
+        uint256 premium;
         uint256 contractCreationDate;
         uint256 contractAnullment;
         uint256 nextPaymentDate;
-        // string[] riskDescriptions;
-        // int256[] riskValues;
-        uint256 numThirdPartyRisks;        
+        //uint256 numThirdPartyRisks; 
+        uint256 drinksPerWeek;
+        uint256 highRiskHours;
+        uint256 numberOfMedications;
+        uint256 hoursOfSleep;
+        uint256 cholestrol;
+        uint256 exercisePerWeek;
+        uint256 stepsPerDay;
+        uint256 waistCircumference;
+        uint256[] riskHistory;
     }
     enum varId {
         userName,
@@ -29,44 +35,60 @@ contract Insurance {
         contractCreationDate,
         contractAnullment,
         nextPaymentDate,
-        numThirdPartyRisks
+        //numThirdPartyRisks,
+        drinksPerWeek,
+        highRiskHours,
+        numberOfMedications,
+        hoursOfSleep,
+        cholestrol,
+        exercisePerWeek,
+        stepsPerDay,
+        waistCircumference
     }
     address private owner;
     UserInfo user;
+    bool userPaymentFailure = false;
     //Logs event of risk after recalculation
-    event RiskUpdated(int256 newRisk);
+    event RiskUpdated(uint256 newRisk);
     //Logs event of premium updated after recalculation
     event PremiumUpdated(int256 newPremium);
     //Logs event of added third party risk descriptions and values
     event newThirdPartyRisk(string riskDescription, int256 newRiskValue);
     constructor(
-        string memory newUser,
-        bool smokerStatus,
-        bool gymStatus,
-        uint256 userWeight,
-        int256 userAge,
-        uint256 valuePayout,
-        int256 InitialPremium, 
-        // address newUserAddress,
-        uint256 anullmentDate   
+        string memory userName,
+        bool isSmoker,
+        bool goesToGym,
+        uint256 weight, // in kilograms
+        uint256 age,
+        uint256 payout,
+        uint256 premium,
+        uint256 anullmentDate
     ) {
         owner = msg.sender;
         user = UserInfo({
-            // userAddress : newUserAddress,
-            userName: newUser,
-            isSmoker: smokerStatus,
-            goesToGym: gymStatus,
-            weight: userWeight,
-            age: userAge,
-            payout: valuePayout,
-            premium: InitialPremium,
-            contractCreationDate: block.timestamp,
-            contractAnullment: block.timestamp + (anullmentDate * 1 days),
-            nextPaymentDate: block.timestamp + 30 days,
-            // riskDescriptions : new string[](0),
-            // riskValues : new int[](0),
-            numThirdPartyRisks : 0
+        // userAddress : newUserAddress,
+        userName: userName, 
+        isSmoker : isSmoker,
+        goesToGym: goesToGym,
+        weight : weight,
+        age : age,
+        payout : payout,
+        premium : premium,
+        contractCreationDate: block.timestamp,
+        contractAnullment: block.timestamp + (anullmentDate * 1 days),
+        nextPaymentDate: block.timestamp + 30 days,
+        //numThirdPartyRisks,
+        drinksPerWeek : 0,
+        highRiskHours : 0,
+        numberOfMedications : 0,
+        hoursOfSleep : 8,
+        cholestrol : 0,
+        exercisePerWeek : 6,
+        stepsPerDay : 10000,
+        waistCircumference : 0,
+        riskHistory : new uint256[](calculateRisk())
         });
+        emit RiskUpdated(user.riskHistory[0]);
     }
     //function to set users smoker status and update existing risk
     function setSmokerStatus(bool newSmokerStatus) public{
@@ -84,61 +106,74 @@ contract Insurance {
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
     }
     //function to set users age and update existing risk
-    function setNewAge(int256 newAge) public{
+    function setNewAge(uint256 newAge) public{
         user.age = newAge;
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
     }
 
-    function updateEvent(uint[] calldata kargs, uint nargs) public returns (string memory) {
+    function updateEvent(uint256[] calldata kargs, uint nargs) public returns (string memory) {
         require(msg.sender == owner, "Only the contract owner can update the profile.");
 
-        for (uint i = 0; i<nargs ; i++) {
-            if (kargs[i] == varId.userName) {
-                user.userName = kargs[++i];
+        for (uint i = 0; i<nargs ; i += 2) {
+            if (varId(kargs[i]) == varId.isSmoker) {
+                user.isSmoker = (kargs[++i] == 1? true:false);
             }
-            else if (kargs[i] == varId.isSmoker) {
-                user.isSmoker = kargs[++i];
+            else if (varId(kargs[i]) == varId.goesToGym) {
+                user.goesToGym = (kargs[++i] == 1? true:false);
             }
-            else if (kargs[i] == varId.goesToGym) {
-                user.goesToGym = kargs[++i];
-            }
-            else if (kargs[i] == varId.weight) {
+            else if (varId(kargs[i]) == varId.weight) {
                 user.weight = kargs[++i];
             }
-            else if (kargs[i] == varId.age) {
+            else if (varId(kargs[i]) == varId.age) {
                 user.age = kargs[++i];
             }
-            else if (kargs[i] == varId.payout) {
+            else if (varId(kargs[i]) == varId.payout) {
                 user.payout = kargs[++i];
             }
-            else if (kargs[i] == varId.premium) {
+            else if (varId(kargs[i]) == varId.premium) {
                 user.premium = kargs[++i];
             }
-            else if (kargs[i] == varId.contractCreationDate) {
+            else if (varId(kargs[i]) == varId.contractCreationDate) {
                 user.contractCreationDate = kargs[++i];
             }
-            else if (kargs[i] == varId.contractAnullment) {
+            else if (varId(kargs[i]) == varId.contractAnullment) {
                 user.contractAnullment = kargs[++i];
             }
-            else if (kargs[i] == varId.nextPaymentDate) {
+            else if (varId(kargs[i]) == varId.nextPaymentDate) {
                 user.nextPaymentDate = kargs[++i];
             }
-            else if (kargs[i] == varId.riskDescriptions) {
-                user.riskDescriptions = kargs[++i];
+            else if (varId(kargs[i]) == varId.drinksPerWeek) {
+                user.drinksPerWeek = kargs[++i];
             }
-            else if (kargs[i] == varId.riskValues) {
-                user.riskValues = kargs[++i];
+            else if (varId(kargs[i]) == varId.highRiskHours) {
+                user.highRiskHours = kargs[++i];
             }
-            else if (kargs[i] == varId.numThirdPartyRisks) {
-                user.numThirdPartyRisks = kargs[++i];
+            else if (varId(kargs[i]) == varId.numberOfMedications) {
+                user.numberOfMedications = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.hoursOfSleep) {
+                user.hoursOfSleep = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.cholestrol) {
+                user.cholestrol = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.exercisePerWeek) {
+                user.exercisePerWeek = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.stepsPerDay) {
+                user.stepsPerDay = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.waistCircumference) {
+                user.waistCircumference = kargs[++i];
             }
         }
-        int256 risk = calculateRisk();
+        uint256 risk = calculateRisk();
+        user.riskHistory.push(risk);
         emit RiskUpdated(risk);
         return "Success";
     }
 
-    function stringToUint(string calldata s) internal returns(uint256, bool) 
+    function stringToUint(string calldata s) internal pure returns(uint256, bool) 
     {
         bytes memory b = bytes(s);
         uint result = 0;
@@ -161,7 +196,7 @@ contract Insurance {
         bool newSmokerStatus,
         bool newGymStatus,
         uint256 newWeight,
-        int256 newAge
+        uint256 newAge
     ) public returns (string memory) {
         require(msg.sender == owner, "Only the contract owner can update the profile.");
 
@@ -172,14 +207,15 @@ contract Insurance {
         user.age = newAge;
 
         // Calculate new risk and premium based on updated profile
-        int256 newRisk = calculateRisk();
-        int256 newPremium = calculatePremium(newRisk);
+        uint256 newRisk = calculateRisk();
+        uint256 newPremium = calculatePremium(newRisk);
 
         // Update user's risk profile and premium
         user.premium = newPremium;
 
         // Emit events for updated risk and premium
         emit RiskUpdated(newRisk);
+        user.riskHistory.push(newRisk);
         // emit PremiumUpdated(newPremium);
 
         return "Profile updated successfully.";
@@ -188,6 +224,7 @@ contract Insurance {
     function getUserProfile() public view returns (UserInfo memory) {
         return user;
     }
+    /*
     //function that takes in some risk assessments from a third party and adds it as new third party risks
     function addThirdPartyData(string[] calldata riskDesc, int256[] calldata riskValue) public returns (int256){
         uint riskLength = riskDesc.length;
@@ -203,28 +240,70 @@ contract Insurance {
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
         return 1;
     }
-   
+   */
     // Function to calculate risk based on user profile
-    function calculateRisk() public view returns (int256) {
-        int256 baseRisk = user.age / 2;
+    function calculateRisk() public view returns (uint256) {
+        uint256 baseRisk = user.age / 2;
         if (user.isSmoker) {
-            baseRisk *= 3;
+            baseRisk *= 4;
         }
         if (!user.goesToGym) {
-            baseRisk = baseRisk/3;
+            baseRisk = baseRisk/2;
         }
         if (user.weight > 100) {
             baseRisk *= 2;
         }
+        if (user.drinksPerWeek > 10){
+            baseRisk += 10;
+        }
+        if (user.numberOfMedications > 5){
+            baseRisk += 15;
+        }
+        if(user.hoursOfSleep < 5){
+            baseRisk += 10;
+        }
+        if(user.cholestrol > 170){
+            baseRisk += 20;
+        }
+        if(user.exercisePerWeek < 5){
+            baseRisk += 3;
+        }
+        if(user.stepsPerDay <= 10000){
+            baseRisk += 1;
+        }
+        if(user.waistCircumference > 50){
+            baseRisk += 6;
+        }
+
+
         // for(uint256 i = 0; i < user.numThirdPartyRisks; i++){
         //      baseRisk += user.riskValues[i];
         // }
+        
         return baseRisk;
     }
 
     // Function to calculate premium based on risk
-    function calculatePremium(int256 risk) private view returns (int256) {
+    function calculatePremium(uint256 risk) private view returns (uint256) {
         // A simplified formula for premium calculation
-        return risk * 100 + (int256(user.payout/100));
+        return risk * 100 + (user.payout/100);
+    }
+    //The user payment amount is varied and if its paid on time
+    function validatePayment(uint256 paymentAmount) public returns (bool){
+        if(block.timestamp <= user.nextPaymentDate){
+            if(paymentAmount >= user.premium){
+                user.nextPaymentDate = block.timestamp + 30 days;
+                return true;
+            }
+        }
+        userPaymentFailure = true;
+        return false;
+    }
+    //Checks if a claim should be made and the payment amount should be paid
+    function validClaim() public view returns (bool){
+        if(!userPaymentFailure && (block.timestamp < user.contractAnullment)){
+            return true;
+        }
+        return false;
     }
 }
