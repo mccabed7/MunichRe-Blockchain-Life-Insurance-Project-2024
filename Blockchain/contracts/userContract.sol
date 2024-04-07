@@ -128,21 +128,6 @@ contract Insurance {
             else if (varId(kargs[i]) == varId.age) {
                 user.age = kargs[++i];
             }
-            else if (varId(kargs[i]) == varId.payout) {
-                user.payout = kargs[++i];
-            }
-            else if (varId(kargs[i]) == varId.premium) {
-                user.premium = kargs[++i];
-            }
-            else if (varId(kargs[i]) == varId.contractCreationDate) {
-                user.contractCreationDate = kargs[++i];
-            }
-            else if (varId(kargs[i]) == varId.contractAnullment) {
-                user.contractAnullment = kargs[++i];
-            }
-            else if (varId(kargs[i]) == varId.nextPaymentDate) {
-                user.nextPaymentDate = kargs[++i];
-            }
             else if (varId(kargs[i]) == varId.drinksPerWeek) {
                 user.drinksPerWeek = kargs[++i];
             }
