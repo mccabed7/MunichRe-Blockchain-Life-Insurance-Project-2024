@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract Insurance {
     struct UserInfo {
-        string userName;
+        // string userName;
         bool isSmoker;
         bool goesToGym;
         uint256 weight; // in kilograms
@@ -25,7 +25,7 @@ contract Insurance {
         // uint256[] riskHistory;
     }
     enum varId {
-        userName,
+        // userName,
         isSmoker,
         goesToGym,
         weight,
@@ -55,19 +55,19 @@ contract Insurance {
     //Logs event of added third party risk descriptions and values
     event newThirdPartyRisk(string riskDescription, int256 newRiskValue);
     constructor(
-        string memory userName,
+        // string memory userName,
         bool isSmoker,
         bool goesToGym,
         uint256 weight, // in kilograms
         uint256 age,
         uint256 payout,
         uint256 premium,
-        uint256 anullmentDate
+        uint256 daysToAnullment
     ) {
         owner = msg.sender;
         user = UserInfo({
         // userAddress : newUserAddress,
-        userName: userName, 
+        // userName: userName, 
         isSmoker : isSmoker,
         goesToGym: goesToGym,
         weight : weight,
@@ -75,7 +75,7 @@ contract Insurance {
         payout : payout,
         premium : premium,
         contractCreationDate: block.timestamp,
-        contractAnullment: block.timestamp + (anullmentDate * 1 days),
+        contractAnullment: block.timestamp + (daysToAnullment * 1 days),
         nextPaymentDate: block.timestamp + 30 days,
         //numThirdPartyRisks,
         drinksPerWeek : 0,

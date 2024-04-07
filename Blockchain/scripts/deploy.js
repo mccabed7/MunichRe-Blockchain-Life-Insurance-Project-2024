@@ -2,7 +2,14 @@
 async function main() {
 
   const Insuarance = await ethers.getContractFactory("Insurance");
-  const insuarance = await Insuarance.deploy("John", false, true, 75, 30, 75000, 200);
+  //       bool isSmoker,
+  //       bool goesToGym,
+  //       uint256 weight, // in kilograms
+  //       uint256 age,
+  //       uint256 payout,
+  //       uint256 premium,
+  //       uint256 daysToAnullment
+  const insuarance = await Insuarance.deploy(false, true, 75, 34, 75000, 200, 365);
   console.log("Contract Deployed to Address:", insuarance.address);
 }
 
