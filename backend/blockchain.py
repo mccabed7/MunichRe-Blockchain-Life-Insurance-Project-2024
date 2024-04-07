@@ -12,7 +12,8 @@ project_root_folder = os.path.dirname(os.path.dirname(__file__))
 contract_path = project_root_folder + "/Blockchain/artifacts/contracts/userContract.sol/Insurance.json"
 
 USER_CONTRACT_ABI = json.load(open(contract_path))['abi']
-
+VARIABLES_ENUM = [x["name"] for x in USER_CONTRACT_ABI[0]["inputs"]]
+print(VARIABLES_ENUM)
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
@@ -46,6 +47,20 @@ def check_connection():
 #       print(json.dumps(cONTRACT_ABI, indent=2))
 #   else:
 #       print("Error fetching contract ABI:", data['result'])
+
+def send_data(contract_address, data):
+    nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
+
+    # Then use the parsed ABI to create the contract instance
+    contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
+    function_args = []
+    for x in data:
+        function_args.append(VARIABLES_ENUM.index(x))
+        function_args.append(data[x])
+    try:
+        contract.functions.updateEvent().call(function_args, len(function_args))
+    except Exception as e:
+        print(f"Error calling function: {e}")
 
 def deploy():
     # requires hardhat installed, `npm install hardhat`
