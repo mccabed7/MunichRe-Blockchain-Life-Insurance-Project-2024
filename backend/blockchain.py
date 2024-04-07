@@ -29,25 +29,6 @@ def check_connection():
   else:
       print("Connection Failed")
   
-# def get_contract_abi():
-#   # URL for the Etherscan API endpoint to get contract ABI
-#   etherscan_url = f"https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address={CONTRACT_ADDRESS}&apikey={ETHERSCAN_API_KEY}"
-
-#   # Make an API request to Etherscan
-#   response = requests.get(etherscan_url)
-
-#   # Parse the response JSON
-#   data = response.json()
-
-#   # Check if the request was successful
-#   if data['status'] == '1' and data['message'] == 'OK':
-#       # ABI is returned as a JSON-encoded string, so we need to parse it
-#       cONTRACT_ABI = json.loads(data['result'])
-#       print("Contract ABI:")
-#       print(json.dumps(cONTRACT_ABI, indent=2))
-#   else:
-#       print("Error fetching contract ABI:", data['result'])
-
 def send_data(contract_address, data):
     nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
@@ -55,8 +36,11 @@ def send_data(contract_address, data):
     contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
     function_args = []
     for x in data:
-        function_args.append(VARIABLES_ENUM.index(x))
-        function_args.append(data[x])
+        try:
+            function_args.append(VARIABLES_ENUM.index(x))
+            function_args.append(data[x])
+        except ValueError:
+           pass
     try:
         contract.functions.updateEvent().call(function_args, len(function_args))
     except Exception as e:
@@ -70,47 +54,6 @@ def deploy():
     print(result.stderr)
     cont_addr = result.stdout.removeprefix("Contract Deployed to Address: ")
     return cont_addr
-
-def example():
-   # Initialize address nonce
-  nonce = web3.eth.get_transaction_count(CALLER_ADDRESS)
-
-  try:
-      # Parse the ABI string to a Python object
-      parsed_abi = json.loads(cONTRACT_ABI)
-      print("ABI is valid JSON.")
-  except json.JSONDecodeError as e:
-      print(f"Invalid JSON: {e}")
-
-  # Then use the parsed ABI to create the contract instance
-  contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=parsed_abi)
-
-  # Now, parsed_abi should be a list of dictionaries
-  if isinstance(parsed_abi, list):
-      # Extract functions from the ABI
-      functions = [item for item in parsed_abi if item.get('type') == 'function']
-
-      # Iterate over the functions and print details
-      for func in functions:
-          func_name = func.get('name', 'Unnamed function')
-          inputs = func.get('inputs', [])
-          input_details = ', '.join([f"{inp['type']} {inp['name']}" for inp in inputs])
-          print(f"Function name: {func_name}({input_details})")
-  else:
-      print("The ABI was not parsed into a list as expected.")
-
-
-  # Create the contract instance
-  contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=parsed_abi)
-
-  # Example function call (Make sure the function exists in your ABI)
-#   try:
-#       # Replace 'getSentence' with an actual function from your contract's ABI
-#       quote = contract.functions.getSentence().call()
-#       print("\nThe famous quote is:\n", quote)
-#       pass  # Replace or remove this pass statement with your function call
-#   except Exception as e:
-#       print(f"Error calling function: {e}")
 
 def list_abi_functions():
   # Now, parsed_abi should be a list of dictionaries
@@ -134,19 +77,20 @@ def get_contract_details(contract_address):
   contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
 
   try:
-      # ret = contract.functions.updateProfile(True, False, 70, 30).call()
-      ret = contract.functions.getUserProfile().call()
-      name, isSmoker, isGymBro, weight, age, max_payout, monthy_premium, creation, expiry, nextpay = ret #('John', True, True, 70, 30, 75000, 450, 1711061088, 1742597088, 1713653088)
-      creation = time.ctime(creation)
-      print(creation)
-      expiry = time.ctime(expiry)
-      print(expiry)
-      nextpay = time.ctime(nextpay)
-      print(nextpay)
-      print(ret)
+    # ret = contract.functions.updateProfile(True, False, 70, 30).call()
+    ret = contract.functions.getUserProfile().call()
+    name, isSmoker, isGymBro, weight, age, max_payout, monthy_premium, creation, expiry, nextpay = ret #('John', True, True, 70, 30, 75000, 450, 1711061088, 1742597088, 1713653088)
+    creation = time.ctime(creation)
+    print(creation)
+    expiry = time.ctime(expiry)
+    print(expiry)
+    nextpay = time.ctime(nextpay)
+    print(nextpay)
+    print(ret)
+    return ret
   except Exception as e:
     print(f"Error calling function: {e}")
-
+    return None
 
 startBlock = 0
 endBlock = 12878196
