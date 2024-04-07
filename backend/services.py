@@ -24,23 +24,23 @@ def get_customer_emails():
 def get_customer(contract_address):
     return bc.get_contract_details(contract_address)
 
-def add_customer(customer, sid=None):
-    firstName = customer.get("firstName", "")      
-    lastName = customer.get("lastName", "")
-    dateofBirth = customer.get("dateofBirth", "")
-    address = customer.get("address", "")
-    height = customer.get("height", "")
-    weight = customer.get("weight", "")
-    smoker = customer.get("smoker", "")
-    # c = db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
-    contract_address = bc.deploy()
+# def add_customer(customer, sid=None):
+#     firstName = customer.get("firstName", "")      
+#     lastName = customer.get("lastName", "")
+#     dateofBirth = customer.get("dateofBirth", "")
+#     address = customer.get("address", "")
+#     height = customer.get("height", "")
+#     weight = customer.get("weight", "")
+#     smoker = customer.get("smoker", "")
+#     # c = db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
+#     contract_address = bc.deploy()
 
-    users.add_Details(c.get("id"))
-    return c
+#     users.add_Details(c.get("id"))
+#     return c
 
-def update_item(id, itemtoAccess, newItem):
-    if itemtoAccess in db.customerDatabase[id]:
-        return db.modify_Value(id, itemtoAccess, newItem)
+# def update_item(id, itemtoAccess, newItem):
+#     if itemtoAccess in db.customerDatabase[id]:
+#         return db.modify_Value(id, itemtoAccess, newItem)
     # itemtoAdd = newItem.get(itemtoAccess, "")                                          #      store value of item in itemtoAdd
     
     return None # prevent creation of new tags
@@ -55,16 +55,13 @@ def customer_delete(id, tag='all'):
     return db.delete_Value(id, tag)
 
 
-###### TODO 
-## use sid to get email and verify that its their 
-#  user they are changing (in check_Session_id)
-##  
-
 def add_user(email, password):
     # create customer TODO deploy smart contract
-    result = users.add_Details(email, password, "")
+    result = users.add_Details(email, password, '')
     if result != None:
-        return login(email, password)
+        data = bc.deploy()
+        if data.startswith("0x"):
+            return result
     return None
 
 def delete_user(sid, email):
