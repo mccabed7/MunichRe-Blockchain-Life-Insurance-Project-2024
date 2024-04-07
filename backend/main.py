@@ -40,9 +40,18 @@ def customers_Request():
       return get_customer(user), 200
     elif user=="third-party":
       return get_customer_emails()
-  elif request.method == 'POST':                        #else if request is a Post
-      newCustomer = request.get_json()                  # newCustomer stores values passed from request 
-      return add_customer(newCustomer), 201  #return the data in a dictionary in json format alongside status 201(Created)
+    
+  # send update to blockchain
+  elif request.method == 'POST':
+      user = verify_sid(sid, email)
+      if user.startswith('0x'):
+        data = request.get_json()
+        return update_customer(user, data), 200  #return the data in a dictionary in json format alongside status 201(Created)
+      elif user=="third-party":
+        customer = request.args.get('customer')
+        if customer in users.Users:
+          contract = users.get_data(customer)
+          return update_customer(contract, data), 200
     
 
 # @app.route('/api/customers/<int:id>/<string:itemtoAccess>', methods=['GET', 'PUT', 'DELETE']) #define /customers/id/itemtoAccess endpoint for methods Get, Post and Delete

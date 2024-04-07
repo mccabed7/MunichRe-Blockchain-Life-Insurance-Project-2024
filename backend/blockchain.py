@@ -29,6 +29,7 @@ def check_connection():
   else:
       print("Connection Failed")
   
+# returns length of list sent to blockchain
 def send_data(contract_address, data):
     nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
@@ -41,10 +42,12 @@ def send_data(contract_address, data):
             function_args.append(data[x])
         except ValueError:
            pass
+    
     try:
         contract.functions.updateEvent().call(function_args, len(function_args))
     except Exception as e:
         print(f"Error calling function: {e}")
+    return len(function_args)/2
 
 def deploy():
     # requires hardhat installed, `npm install hardhat`

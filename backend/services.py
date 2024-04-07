@@ -45,10 +45,11 @@ def update_item(id, itemtoAccess, newItem):
     
     return None # prevent creation of new tags
 
-def update_customer(id, updatedValues):
-    for key, value in updatedValues.items():                  # for each key, value pair in updatedValues
-        update_item(id, key, value)
-    return db.access_Value(id, "all")
+def update_customer(contract_address, updatedValues):
+    return bc.send_data(contract_address, updatedValues)
+    # for key, value in updatedValues.items():                  # for each key, value pair in updatedValues
+    #     update_item(id, key, value)
+    # return db.access_Value(id, "all")
 
 def customer_delete(id, tag='all'):
     return db.delete_Value(id, tag)
