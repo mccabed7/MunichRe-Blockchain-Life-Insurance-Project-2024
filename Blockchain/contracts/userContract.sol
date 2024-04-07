@@ -22,7 +22,7 @@ contract Insurance {
         uint256 exercisePerWeek;
         uint256 stepsPerDay;
         uint256 waistCircumference;
-        uint256[] riskHistory;
+        // uint256[] riskHistory;
     }
     enum varId {
         userName,
@@ -85,10 +85,11 @@ contract Insurance {
         cholestrol : 0,
         exercisePerWeek : 6,
         stepsPerDay : 10000,
-        waistCircumference : 0,
-        riskHistory : new uint256[](calculateRisk())
+        waistCircumference : 0
+        // riskHistory : new uint256[](calculateRisk())
         });
-        emit RiskUpdated(user.riskHistory[0]);
+        emit RiskUpdated(calculateRisk());
+        // emit RiskUpdated(user.riskHistory[0]);
     }
     //function to set users smoker status and update existing risk
     function setSmokerStatus(bool newSmokerStatus) public{
@@ -168,7 +169,7 @@ contract Insurance {
             }
         }
         uint256 risk = calculateRisk();
-        user.riskHistory.push(risk);
+        // user.riskHistory.push(risk);
         emit RiskUpdated(risk);
         return "Success";
     }
@@ -215,7 +216,7 @@ contract Insurance {
 
         // Emit events for updated risk and premium
         emit RiskUpdated(newRisk);
-        user.riskHistory.push(newRisk);
+        // user.riskHistory.push(newRisk);
         // emit PremiumUpdated(newPremium);
 
         return "Profile updated successfully.";

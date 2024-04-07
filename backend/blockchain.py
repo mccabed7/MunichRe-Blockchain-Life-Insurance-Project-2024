@@ -12,8 +12,10 @@ project_root_folder = os.path.dirname(os.path.dirname(__file__))
 contract_path = project_root_folder + "/Blockchain/artifacts/contracts/userContract.sol/Insurance.json"
 
 USER_CONTRACT_ABI = json.load(open(contract_path))['abi']
-VARIABLES_ENUM = [x["name"] for x in USER_CONTRACT_ABI[0]["inputs"]]
-print(VARIABLES_ENUM)
+CONTRACT_GETUSERPROFILE = [x for x in USER_CONTRACT_ABI if x["type"]=="function"and x["name"]=="getUserProfile"][0]
+# print(CONTRACT_GETUSERPROFILE)
+VARIABLES_ENUM = [y["name"] for y in CONTRACT_GETUSERPROFILE["outputs"][0]["components"]]
+# print(VARIABLES_ENUM)
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
