@@ -87,7 +87,6 @@ contract Insurance {
         stepsPerDay : 10000,
         waistCircumference : 0,
         riskHistory : new uint256[](calculateRisk())
-            
         });
         emit RiskUpdated(user.riskHistory[0]);
     }
@@ -280,7 +279,7 @@ contract Insurance {
         // for(uint256 i = 0; i < user.numThirdPartyRisks; i++){
         //      baseRisk += user.riskValues[i];
         // }
-
+        
         return baseRisk;
     }
 
