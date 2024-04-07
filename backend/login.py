@@ -18,21 +18,28 @@ def attempt_Login(emailAddress, password):
         return password == Users[emailAddress]["password"]
     return False
 
+def get_all_customer_emails():
+    return [x for x in Users if Users[x]['data'].startswith('0x')]
+
 def get_data(emailAddress):
     if emailAddress in Users:
         return Users[emailAddress]['data']
     return None
 
 def add_Details(emailAddress, password, data):
-    password = password.get("password", "")
-    Users[emailAddress] = {"password" : password, "data" : data}  
-    sid = add_Session_id(emailAddress)
-    return sid
+    # password = password.get("password", "")
+    if emailAddress not in Users:
+        Users[emailAddress] = {"password" : password, "data" : data}  
+        return add_Session_id(emailAddress)
+    return None
 
 def delete_Details(sid, emailAddress):
     if check_Session_id(sid, emailAddress) != None:
         del Users[emailAddress]
-        return 
+        del sessions[sid]
+        # TODO delete blockchain smart contract
+        return True
+    return False
 
 def modify_Password(emailAddress, arguments):
     newPassword = arguments.get("newPassword", "")
@@ -49,7 +56,7 @@ def generate_Session_id():
 def add_Session_id(emailAddress):
     sessionId = generate_Session_id() 
     # TODO store a timestamp in future for removing old sessions
-    sessions[str(sessionId)] = emailAddress # no need to store another nested dictionary
+    sessions[sessionId] = emailAddress # no need to store another nested dictionary
     return sessionId
 
 def search_Sessions(emailAddress):       #function to search for key tied to email, temporary function
@@ -57,11 +64,10 @@ def search_Sessions(emailAddress):       #function to search for key tied to ema
         if emailAddress == value:
             return key
         
-
 def check_Session_id(sid, email):
-    check = sessions.get(sid, email)
+    check = sessions.get(sid, None)
     if check!=None and check == email:
-        return check
+        return get_data(email)
     return None
 
 # currently no check to clean sessions

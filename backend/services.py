@@ -18,15 +18,11 @@ def get_risk_timeline(contract_address):
         print(msg)
         return msg
     
-def get_customer(id, tag='all'):
-    try:
-        if id == 'all':
-            return db.customerDatabase
-        return db.access_Value(id, tag)
-    
-    except Exception as e:
-        print(e)
-        return None
+def get_customer_emails():
+    return users.get_all_emails()
+
+def get_customer(contract_address):
+    return bc.get_contract_details(contract_address)
 
 def add_customer(customer, sid=None):
     firstName = customer.get("firstName", "")      
@@ -36,8 +32,9 @@ def add_customer(customer, sid=None):
     height = customer.get("height", "")
     weight = customer.get("weight", "")
     smoker = customer.get("smoker", "")
-    c = db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
-   
+    # c = db.add_Customer(firstName, lastName, dateofBirth, address, height, weight, smoker)
+    contract_address = bc.deploy()
+
     users.add_Details(c.get("id"))
     return c
 
@@ -67,15 +64,15 @@ def add_user(email, password):
     result = users.add_Details(email, password, "")
     if result != None:
         return login(email, password)
-    return result
+    return None
 
 def delete_user(sid, email):
-    if verify_sid(sid, email) == email:
+    if verify_sid(sid, email)!=None:
         return users.delete_Details(sid, email)
     return None
 
 def change_password(sid, email, password):
-    if verify_sid(sid, email):
+    if verify_sid(sid, email)!=None:
         return users.modify_Password(email, password)
     return None
 
@@ -94,9 +91,9 @@ def make_third_party_application(email, password, message=""):
 
 def approve_third_party(index):
     email, password, _ = tp.applications[index]
-    users.add_Details(email, password, "third-party")
     print(users.Users)
-
+    return users.add_Details(email, password, "third-party")
+    
 def get_pending_applications(sid, email):
-    if verify_sid(sid, email) and users.Users[email]["data"] == "admin":
+    if verify_sid(sid, email) == "admin":
         return tp.applications
