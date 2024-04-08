@@ -6,7 +6,7 @@ footerBox {
     display: block;
     padding-top: 3.5%;
     padding-bottom: 3.5%;
-    background: #6030a8;
+    background: #2a1c55;
     justify-content: left;
     width: 100%;;
 }
@@ -76,7 +76,7 @@ footerLink {
 }
 
 footerLink:hover {
-    color: #3484b9;
+    color: #8e91db;
     transition: 200ms ease-in;
 }
 
