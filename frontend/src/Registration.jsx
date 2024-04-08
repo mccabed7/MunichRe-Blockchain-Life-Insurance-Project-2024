@@ -142,7 +142,7 @@ const RegisterForm = () => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);	
                     }
-                    return response.json();})
+                    return response.text();})
                 .then(data => {
                     setSessionID(data);
                     console.log('Response data:', data)
@@ -277,7 +277,7 @@ const LoginForm = () => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);	
                     }
-                    return response.json();})
+                    return response.text();})
                 .then(data => {
                     setSessionID(data);
                 ;});
