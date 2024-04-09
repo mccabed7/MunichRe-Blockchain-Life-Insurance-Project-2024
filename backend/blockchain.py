@@ -84,15 +84,18 @@ def get_contract_details(contract_address):
   try:
     # ret = contract.functions.updateProfile(True, False, 70, 30).call()
     ret = contract.functions.getUserProfile().call()
-    name, isSmoker, isGymBro, weight, age, max_payout, monthy_premium, creation, expiry, nextpay = ret #('John', True, True, 70, 30, 75000, 450, 1711061088, 1742597088, 1713653088)
-    creation = time.ctime(creation)
-    print(creation)
-    expiry = time.ctime(expiry)
-    print(expiry)
-    nextpay = time.ctime(nextpay)
-    print(nextpay)
+    # name, isSmoker, isGymBro, weight, age, max_payout, monthy_premium, creation, expiry, nextpay = ret #('John', True, True, 70, 30, 75000, 450, 1711061088, 1742597088, 1713653088)
+    # creation = time.ctime(creation)
+    # print(creation)
+    # expiry = time.ctime(expiry)
+    # print(expiry)
+    # nextpay = time.ctime(nextpay)
+    # print(nextpay)
     print(ret)
-    return ret
+    details = {}
+    for x in range(len(ret)):
+       details[VARIABLES_ENUM[x]] = ret[x]
+    return details
   except Exception as e:
     print(f"Error calling function: {e}")
     return None
@@ -116,8 +119,8 @@ if __name__=="__main__":
     # get_contract_abi()
     
     # example()
-    list_abi_functions()
-    # get_contract_details(CONTRACT_ADDRESS)
+    # list_abi_functions()
+    print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
     # get_contract_events(CONTRACT_ADDRESS)
     # print(deploy())
     pass
