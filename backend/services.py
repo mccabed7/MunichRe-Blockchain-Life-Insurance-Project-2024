@@ -19,7 +19,7 @@ def get_risk_timeline(contract_address):
         return msg
     
 def get_customer_emails():
-    return users.get_all_emails()
+    return users.get_all_customer_emails()
 
 def get_customer(contract_address):
     return bc.get_contract_details(contract_address)
