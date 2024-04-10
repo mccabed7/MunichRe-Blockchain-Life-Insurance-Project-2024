@@ -1,7 +1,9 @@
 //import ReactDOM from "react-dom/client";
 import "./SubmitInfo.css";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Switch } from "react-router-dom";
+import { setSessionID } from './sessionModule.jsx';
 
 function SubmitInfo() {
   const [inputs, setInputs] = useState({});
@@ -27,16 +29,75 @@ function SubmitInfo() {
     waistCircumference: ""
 });
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
     setInputs(values => ({...values, [name]: value}))
   }
 
-  const handleSubmit = (event) => {
+  //const navigate = useNavigate();
+
+  /*const handleSubmit = (event) => {
     event.preventDefault();
     console.log(inputs);
-  }
+  }*/
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //if (isFormValid()) {
+        // Method which submits to API and checks if valid
+        const dataForBackend = {
+            'addressline1' : values.addressline1,
+            'addressline2' : values.addressline2,
+            'city': values.city,
+            'county': values.county,
+            'country': values.country,
+            'eircode': values.eircode,
+            'height': values.height,
+            'weight': values.weight,
+            'smoker': values.smoker,
+            'updateType': values.updateType,
+            'drinksPerWeek': values.drinksPerWeek,
+            'highRiskHours': values.highRiskHours,
+            'numberOfMedications': values.numberOfMedications,
+            'hoursOfSleep': values.hoursOfSleep,
+            'cholesterol': values.cholesterol,
+            'exercisePerWeek': values.exercisePerWeek,
+            'stepsPerDay': values.stepsPerDay,
+            'waistCircumference': values.waistCircumference
+        }
+
+        //setEmail(values.email);
+        try {
+            const response = await fetch('/api/customers?emailAddress=' + values.email + '&sid=' + values.sid,{
+                method: 'POST',
+                mode: 'cors', 
+                headers: {
+                    'Content-Type': 'application/json'
+                    
+                },
+                body: JSON.stringify(dataForBackend)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);	
+                }
+                return response.json();})
+            .then(data => {
+                setSessionID(data);
+                console.log('Response data:', data)
+            ;});
+            
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+
+    /*} else {
+        
+        alert('Invalid form data. Please check your inputs.');
+    }*/
+  };
 
   const onChange = (e) => {
     setValues({...values, [e.target.name]: e.target.value});
