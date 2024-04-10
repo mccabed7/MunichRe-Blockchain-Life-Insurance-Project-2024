@@ -9,11 +9,11 @@ let customerEmail = null;
 function SubmitData({email}) {
 
     const [values, setValues] = useState({
-        illnessType: "",
-        illnessMortalityRate: "",
-        healthScore: "",
-        currentWeight: "",
-        alcoholConsumption: "",
+        illnessType: 0,
+        illnessMortalityRate: 0,
+        healthScore: 0,
+        currentWeight: 0,
+        alcoholConsumption: 0,
     });
 
     const onChange = (e) => {
