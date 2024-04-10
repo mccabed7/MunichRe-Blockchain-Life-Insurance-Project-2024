@@ -24,7 +24,7 @@ const ThirdPartyClient = () => {
         }
 
         // console.log(response.text());
-        const data = response.text();
+        const data = await response.text();
         setSessionID(data); // Assuming the response contains a 'sid' field
         setEmail(thirdPartyEmail);
         // console.log(sessionID);

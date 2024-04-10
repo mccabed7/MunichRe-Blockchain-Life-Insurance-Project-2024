@@ -1,6 +1,11 @@
 import "./SubmitData.css";
 import React, { useState } from "react";
 
+import { getSessionID, getEmail, getCustomerEmail  } from './sessionModule';
+let sessionID = null;
+let email = null;
+let customerEmail = null;
+
 function SubmitData({email}) {
 
     const [values, setValues] = useState({
@@ -24,8 +29,11 @@ function SubmitData({email}) {
         };
 
         // Perform POST request to backend endpoint
+        sessionID = getSessionID();
+        email = getEmail();
+        customerEmail = getCustomerEmail();
         try {
-            const response = await fetch('/api/customers', {
+            const response = await fetch(`http://127.0.0.1:5000/api/customers?emailAddress=${(email)}&sid=${(sessionID)}&customer=${(customerEmail)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -54,17 +62,18 @@ function SubmitData({email}) {
                         <input type="text" name="illnessType" value={values.illnessType} onChange={onChange} />
                     </div>
                     <div class="form-group">
-                    <label>Illness Mortality Rate</label>
+                    <label>Illness Mortality Rate (%)</label>
                     <select 
                         name="illnessMortalityRate" 
                         value={values.illnessMortalityRate} 
                         onChange={onChange}
                     >
                         <option value="">Select...</option>
-                        <option value="0-25%">0-25%</option>
-                        <option value="25-50%">25-50%</option>
-                        <option value="50-75%">50-75%</option>
-                        <option value="75-100%">75-100%</option>
+                        <option value="0">0</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="75">75</option>
+                        <option value="100">100</option>
                     </select>
                 </div>
                 <div className="form-group">

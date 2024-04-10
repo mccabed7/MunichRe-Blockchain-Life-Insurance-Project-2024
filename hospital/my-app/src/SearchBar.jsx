@@ -2,6 +2,12 @@ import "./SearchBar.css";
 import React, { useState } from "react";
 import SubmitData from './SubmitData'; // Assuming you have this component
 
+import { getSessionID, getEmail, setCustomerEmail } from './sessionModule';
+let sessionID = null;
+let hospitalEmail = null;
+let customerEmail = null;
+
+
 function SearchBar() {
     const [email, setEmail] = useState('');
     const [showSubmitForm, setShowSubmitForm] = useState(false);
@@ -15,27 +21,30 @@ function SearchBar() {
             return;
         }
 
-        setUserExists(true);
-        // try {
-        //     const response = await fetch(`/api/customers?emailAddress=${encodeURIComponent(email)}`);
-        //     if (!response.ok) {
-        //         throw new Error(`HTTP error! Status: ${response.status}`);
-        //     }
-        //     setUserExists(true);
-        //     const data = await response.json();
+        //setUserExists(true);
+        sessionID = getSessionID();
+        hospitalEmail = getEmail();
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/api/customers?emailAddress=${(hospitalEmail)}&sid=${(sessionID)}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            setUserExists(true);
+            const data = await response.json();
             
-        //     // Check if user data was found
-        //     if (data) {
-        //         setUserExists(true);
-        //     } else {
-        //         setError("No patient found with that email address.")
-        //         setUserExists(false);
-        //     }
-        // } catch (error) {
-        //     setError("Failed to retrieve patient data.");
-        //     console.error('Error fetching patient data:', error);
-        //     setUserExists(false);
-        // }
+            // Check if user data was found
+            if (data) {
+                setUserExists(true);
+            } else {
+                setError("No patient found with that email address.")
+                setUserExists(false);
+            }
+            setCustomerEmail(email);
+        } catch (error) {
+            setError("Failed to retrieve patient data.");
+            console.error('Error fetching patient data:', error);
+            setUserExists(false);
+        }
     };
 
     return (
