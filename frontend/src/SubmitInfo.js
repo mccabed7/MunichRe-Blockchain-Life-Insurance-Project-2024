@@ -3,7 +3,9 @@ import "./SubmitInfo.css";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Switch } from "react-router-dom";
-import { setSessionID } from './sessionModule.jsx';
+import { getSessionID, getEmail } from './sessionModule.jsx';
+let emailAddress = null;
+let sid = null;
 
 function SubmitInfo() {
   const [inputs, setInputs] = useState({});
@@ -15,18 +17,18 @@ function SubmitInfo() {
     county: "",
     country: "",
     eircode: "",
-    height: "",
-    weight: "",
-    smoker: "",
+    height: 0,
+    weight: 0,
+    smoker: 0,
     updateType: "",
-    drinksPerWeek: "",
-    highRiskHours: "",
-    numberOfMedications: "",
-    hoursOfSleep: "",
-    cholesterol: "",
-    exercisePerWeek: "",
-    stepsPerDay: "",
-    waistCircumference: ""
+    drinksPerWeek: 0,
+    highRiskHours: 0,
+    numberOfMedications: 0,
+    hoursOfSleep: 0,
+    cholesterol: 0,
+    exercisePerWeek: 0,
+    stepsPerDay: 0,
+    waistCircumference: 0
 });
 
   const handleChange = (e) => {
@@ -48,16 +50,9 @@ function SubmitInfo() {
     //if (isFormValid()) {
         // Method which submits to API and checks if valid
         const dataForBackend = {
-            'addressline1' : values.addressline1,
-            'addressline2' : values.addressline2,
-            'city': values.city,
-            'county': values.county,
-            'country': values.country,
-            'eircode': values.eircode,
             'height': values.height,
             'weight': values.weight,
-            'smoker': values.smoker,
-            'updateType': values.updateType,
+            'smoker': (values.smoker === "True") ? 1 : 0,
             'drinksPerWeek': values.drinksPerWeek,
             'highRiskHours': values.highRiskHours,
             'numberOfMedications': values.numberOfMedications,
@@ -68,9 +63,12 @@ function SubmitInfo() {
             'waistCircumference': values.waistCircumference
         }
 
-        //setEmail(values.email);
+        
+
+        emailAddress = getEmail();
+        sid = getSessionID();
         try {
-            const response = await fetch('/api/customers?emailAddress=' + values.email + '&sid=' + values.sid,{
+            const response = await fetch('/api/customers?emailAddress=' + emailAddress + '&sid=' + sid,{
                 method: 'POST',
                 mode: 'cors', 
                 headers: {
@@ -82,11 +80,7 @@ function SubmitInfo() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);	
                 }
-                return response.json();})
-            .then(data => {
-                setSessionID(data);
-                console.log('Response data:', data)
-            ;});
+                return response.json();});
             
         } catch (error) {
             console.error('Error:', error);
@@ -280,8 +274,8 @@ const FitnessForm = () =>
               class="submitInfo"
             >
               <option value="">Select option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="Yes">True</option>
+              <option value="No">False</option>
             </select>
           </label>
           <button class="submitInfo"> Submit </button>
