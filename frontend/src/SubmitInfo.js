@@ -49,6 +49,7 @@ function SubmitInfo() {
     e.preventDefault();
     //if (isFormValid()) {
         // Method which submits to API and checks if valid
+<<<<<<< HEAD
         const dataForBackend = {
             'height': values.height,
             'weight': values.weight,
@@ -61,6 +62,21 @@ function SubmitInfo() {
             'exercisePerWeek': values.exercisePerWeek,
             'stepsPerDay': values.stepsPerDay,
             'waistCircumference': values.waistCircumference
+=======
+        console.log("This is smoker:" + inputs.smoker + "end")
+        const dataForBackend = {
+            'height': inputs.height,
+            'weight': inputs.weight,
+            'smoker': (inputs.smoker == "True") ? 1 : 0,
+            'drinksPerWeek': inputs.drinksPerWeek,
+            'highRiskHours': inputs.highRiskHours,
+            'numberOfMedications': inputs.numberOfMedications,
+            'hoursOfSleep': inputs.hoursOfSleep,
+            'cholesterol': inputs.cholesterol,
+            'exercisePerWeek': inputs.exercisePerWeek,
+            'stepsPerDay': inputs.stepsPerDay,
+            'waistCircumference': inputs.waistCircumference
+>>>>>>> 5d9060b5b1dfcffb40ed0acd8a63195ebb7e3ed6
         }
 
         
@@ -118,8 +134,8 @@ function SubmitInfo() {
               class="extraInfo"
             >
               <option value="">Select option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="False">True</option>
+              <option value="True">False</option>
     </select>
     </label>
     <label class="extraInfo"> Average units of alcohol per week
@@ -274,8 +290,13 @@ const FitnessForm = () =>
               class="submitInfo"
             >
               <option value="">Select option</option>
+<<<<<<< HEAD
               <option value="Yes">True</option>
               <option value="No">False</option>
+=======
+              <option value="True">True</option>
+              <option value="False">False</option>
+>>>>>>> 5d9060b5b1dfcffb40ed0acd8a63195ebb7e3ed6
             </select>
           </label>
           <button class="submitInfo"> Submit </button>
