@@ -19,6 +19,7 @@ VARIABLES_ENUM = [y["name"] for y in CONTRACT_GETUSERPROFILE["outputs"][0]["comp
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
+web3.eth._default_account = CREATOR_ADDRESS
 
 def check_connection():
   # Verify if the connection is successful
@@ -33,20 +34,21 @@ def check_connection():
   
 # returns length of list sent to blockchain
 def send_data(contract_address, data):
-    nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
+    # nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
     # Then use the parsed ABI to create the contract instance
     contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
+    
     function_args = []
     for x in data:
         try:
             function_args.append(VARIABLES_ENUM.index(x))
-            function_args.append(data[x])
+            function_args.append(int(data[x]))
         except ValueError:
            pass
     
     try:
-        contract.functions.updateEvent().call(function_args, len(function_args))
+        contract.functions.updateEvent(function_args, len(function_args)).call()
     except Exception as e:
         print(f"Error calling function: {e}")
     return len(function_args)/2
@@ -76,7 +78,7 @@ def list_abi_functions():
       print("The ABI was not parsed into a list as expected.")
 
 def get_contract_details(contract_address):
-  nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
+#   nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
   # Then use the parsed ABI to create the contract instance
   contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
@@ -91,7 +93,7 @@ def get_contract_details(contract_address):
     # print(expiry)
     # nextpay = time.ctime(nextpay)
     # print(nextpay)
-    print(ret)
+    # print(ret)
     details = {}
     for x in range(len(ret)):
        details[VARIABLES_ENUM[x]] = ret[x]
@@ -120,7 +122,8 @@ if __name__=="__main__":
     
     # example()
     # list_abi_functions()
-    print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
-    # get_contract_events(CONTRACT_ADDRESS)
+    # print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
+    # get_contract_events("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1")
     # print(deploy())
+    print(send_data("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1", {"weight":80}))
     pass
