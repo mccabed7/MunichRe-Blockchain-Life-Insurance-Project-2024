@@ -22,6 +22,10 @@ contract Insurance {
         uint256 exercisePerWeek;
         uint256 stepsPerDay;
         uint256 waistCircumference;
+        //string illnessType;
+        uint256 illnessMortalityRate;
+        uint256 healthScore;
+        
         // uint256[] riskHistory;
     }
     enum varId {
@@ -43,7 +47,9 @@ contract Insurance {
         cholestrol,
         exercisePerWeek,
         stepsPerDay,
-        waistCircumference
+        waistCircumference,
+        illnessMortalityRate,
+        healthScore
     }
     address private owner;
     UserInfo user;
@@ -85,7 +91,11 @@ contract Insurance {
         cholestrol : 0,
         exercisePerWeek : 6,
         stepsPerDay : 10000,
-        waistCircumference : 0
+        waistCircumference : 0,
+        //illnessType : "None",
+        illnessMortalityRate : 0,
+        healthScore : 5
+
         // riskHistory : new uint256[](calculateRisk())
         });
         emit RiskUpdated(calculateRisk());
@@ -115,7 +125,7 @@ contract Insurance {
     function updateEvent(uint256[] calldata kargs, uint nargs) public returns (string memory) {
         require(msg.sender == owner, "Only the contract owner can update the profile.");
 
-        for (uint i = 0; i<nargs ; i += 2) {
+        for (uint i = 0; i<nargs ; i++) {
             if (varId(kargs[i]) == varId.isSmoker) {
                 user.isSmoker = (kargs[++i] == 1? true:false);
             }
@@ -151,6 +161,12 @@ contract Insurance {
             }
             else if (varId(kargs[i]) == varId.waistCircumference) {
                 user.waistCircumference = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.illnessMortalityRate) {
+                user.illnessMortalityRate = kargs[++i];
+            }
+            else if (varId(kargs[i]) == varId.healthScore) {
+                user.healthScore = kargs[++i];
             }
         }
         uint256 risk = calculateRisk();
@@ -254,11 +270,15 @@ contract Insurance {
         if(user.exercisePerWeek < 5){
             baseRisk += 3;
         }
-        if(user.stepsPerDay <= 10000){
+        if(user.stepsPerDay < 10000){
             baseRisk += 1;
         }
         if(user.waistCircumference > 50){
             baseRisk += 6;
+        }
+        baseRisk += (50 * user.illnessMortalityRate)/100;
+        if(user.healthScore >= 5){
+            baseRisk += 10;
         }
 
 
