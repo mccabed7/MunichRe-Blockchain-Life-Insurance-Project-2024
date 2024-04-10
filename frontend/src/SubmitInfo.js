@@ -49,18 +49,19 @@ function SubmitInfo() {
     e.preventDefault();
     //if (isFormValid()) {
         // Method which submits to API and checks if valid
+        console.log("This is smoker:" + inputs.smoker + "end")
         const dataForBackend = {
-            'height': values.height,
-            'weight': values.weight,
-            'smoker': (values.smoker === "True") ? 1 : 0,
-            'drinksPerWeek': values.drinksPerWeek,
-            'highRiskHours': values.highRiskHours,
-            'numberOfMedications': values.numberOfMedications,
-            'hoursOfSleep': values.hoursOfSleep,
-            'cholesterol': values.cholesterol,
-            'exercisePerWeek': values.exercisePerWeek,
-            'stepsPerDay': values.stepsPerDay,
-            'waistCircumference': values.waistCircumference
+            'height': inputs.height,
+            'weight': inputs.weight,
+            'smoker': (inputs.smoker == "True") ? 1 : 0,
+            'drinksPerWeek': inputs.drinksPerWeek,
+            'highRiskHours': inputs.highRiskHours,
+            'numberOfMedications': inputs.numberOfMedications,
+            'hoursOfSleep': inputs.hoursOfSleep,
+            'cholesterol': inputs.cholesterol,
+            'exercisePerWeek': inputs.exercisePerWeek,
+            'stepsPerDay': inputs.stepsPerDay,
+            'waistCircumference': inputs.waistCircumference
         }
 
         
@@ -118,8 +119,8 @@ function SubmitInfo() {
               class="extraInfo"
             >
               <option value="">Select option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="False">True</option>
+              <option value="True">False</option>
     </select>
     </label>
     <label class="extraInfo"> Average units of alcohol per week
@@ -274,8 +275,8 @@ const FitnessForm = () =>
               class="submitInfo"
             >
               <option value="">Select option</option>
-              <option value="Yes">True</option>
-              <option value="No">False</option>
+              <option value="True">True</option>
+              <option value="False">False</option>
             </select>
           </label>
           <button class="submitInfo"> Submit </button>
