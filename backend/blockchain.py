@@ -48,10 +48,10 @@ def send_data(contract_address, data):
            pass
     
     try:
-        contract.functions.updateEvent(function_args, len(function_args)).call()
+        return contract.functions.updateEvent(function_args, len(function_args)).call())
     except Exception as e:
-        print(f"Error calling function: {e}")
-    return len(function_args)/2
+        return (f"Error calling function: {e}")
+     # len(function_args)/2
 
 def deploy():
     # requires hardhat installed, `npm install hardhat`
@@ -122,8 +122,8 @@ if __name__=="__main__":
     
     # example()
     # list_abi_functions()
-    # print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
-    # get_contract_events("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1")
+    print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
+    get_contract_events("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1")
     # print(deploy())
     print(send_data("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1", {"weight":80}))
     pass
