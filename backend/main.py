@@ -44,13 +44,17 @@ def customers_Request():
   # send update to blockchain
   elif request.method == 'POST':
       user = verify_sid(sid, email)
+      data = request.get_json()
+      print("LOGGED IN")
       if user.startswith('0x'):
-        data = request.get_json()
+        
+        
         return update_customer(user, data), 200  #return the data in a dictionary in json format alongside status 201(Created)
       elif user=="third-party":
         customer = request.args.get('customer')
         if customer in users.Users:
           contract = users.get_data(customer)
+          print("GOT HERE" + str(contract))
           return update_customer(contract, data), 200
     
 
