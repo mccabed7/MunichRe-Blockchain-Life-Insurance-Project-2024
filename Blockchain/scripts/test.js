@@ -3,53 +3,111 @@ const { ethers } = require("ethers");
 async function main() {
   // Read the contract's ABI from the file
   const abi = [
-    // Constructor
     {
       "inputs": [
         {
           "internalType": "bool",
-          "name": "newSmokerStatus",
+          "name": "isSmoker",
           "type": "bool"
         },
         {
           "internalType": "bool",
-          "name": "newGymStatus",
+          "name": "goesToGym",
           "type": "bool"
         },
         {
           "internalType": "uint256",
-          "name": "newWeight",
+          "name": "weight",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "newAge",
+          "name": "age",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "payout",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "premium",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "daysToAnullment",
           "type": "uint256"
         }
       ],
-      "name": "updateProfile",
-      "outputs": [
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
         {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
+          "indexed": false,
+          "internalType": "int256",
+          "name": "newPremium",
+          "type": "int256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "name": "PremiumUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newRisk",
+          "type": "uint256"
+        }
+      ],
+      "name": "RiskUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "riskDescription",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "newRiskValue",
+          "type": "int256"
+        }
+      ],
+      "name": "newThirdPartyRisk",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "calculateRisk",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
-    // getUserProfile function
     {
       "inputs": [],
       "name": "getUserProfile",
       "outputs": [
         {
           "components": [
-            {
-              "internalType": "string",
-              "name": "userName",
-              "type": "string"
-            },
             {
               "internalType": "bool",
               "name": "isSmoker",
@@ -94,9 +152,49 @@ async function main() {
               "internalType": "uint256",
               "name": "nextPaymentDate",
               "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "drinksPerWeek",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "highRiskHours",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numberOfMedications",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hoursOfSleep",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "cholestrol",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "exercisePerWeek",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "stepsPerDay",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "waistCircumference",
+              "type": "uint256"
             }
           ],
-          "internalType": "struct Insurance.UserProfile",
+          "internalType": "struct Insurance.UserInfo",
           "name": "",
           "type": "tuple"
         }
@@ -104,17 +202,145 @@ async function main() {
       "stateMutability": "view",
       "type": "function"
     },
-    // verifyPremiumPayment function
     {
       "inputs": [
         {
           "internalType": "bool",
-          "name": "premiumPaid",
+          "name": "newGymStatus",
           "type": "bool"
         }
       ],
-      "name": "verifyPremiumPayment",
+      "name": "setGymStatus",
       "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newAge",
+          "type": "uint256"
+        }
+      ],
+      "name": "setNewAge",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newWeight",
+          "type": "uint256"
+        }
+      ],
+      "name": "setNewWeight",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "newSmokerStatus",
+          "type": "bool"
+        }
+      ],
+      "name": "setSmokerStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "kargs",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nargs",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateEvent",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "newSmokerStatus",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "newGymStatus",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "newWeight",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "newAge",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateProfile",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "validClaim",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "paymentAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "validatePayment",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     }
