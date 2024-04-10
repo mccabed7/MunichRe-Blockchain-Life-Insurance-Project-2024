@@ -36,9 +36,9 @@ function LandingPage() {
 
           <div className="links">
             <ul>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">How It Works</a></li>
-              <li><a href="#">Contact Us</a></li>
+              <li><Link to="/aboutus"><a href="#">About Us</a></Link></li>
+              <li><Link to="/howitworks"><a href="#">How It Works</a></Link></li>
+              <li><Link to="/contactus"><a href="#">Contact Us</a></Link></li>
               <li><Link to="/registration"><a href="#" className="btn">Register</a></Link></li>
             </ul>
           </div>

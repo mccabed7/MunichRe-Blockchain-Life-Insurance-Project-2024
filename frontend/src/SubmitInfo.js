@@ -1,7 +1,11 @@
 //import ReactDOM from "react-dom/client";
 import "./SubmitInfo.css";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Switch } from "react-router-dom";
+import { getSessionID, getEmail } from './sessionModule.jsx';
+let emailAddress = null;
+let sid = null;
 
 function SubmitInfo() {
   const [inputs, setInputs] = useState({});
@@ -13,30 +17,81 @@ function SubmitInfo() {
     county: "",
     country: "",
     eircode: "",
-    height: "",
-    weight: "",
-    smoker: "",
+    height: 0,
+    weight: 0,
+    smoker: 0,
     updateType: "",
-    drinksPerWeek: "",
-    highRiskHours: "",
-    numberOfMedications: "",
-    hoursOfSleep: "",
-    cholesterol: "",
-    exercisePerWeek: "",
-    stepsPerDay: "",
-    waistCircumference: ""
+    drinksPerWeek: 0,
+    highRiskHours: 0,
+    numberOfMedications: 0,
+    hoursOfSleep: 0,
+    cholesterol: 0,
+    exercisePerWeek: 0,
+    stepsPerDay: 0,
+    waistCircumference: 0
 });
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
     setInputs(values => ({...values, [name]: value}))
   }
 
-  const handleSubmit = (event) => {
+  //const navigate = useNavigate();
+
+  /*const handleSubmit = (event) => {
     event.preventDefault();
     console.log(inputs);
-  }
+  }*/
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //if (isFormValid()) {
+        // Method which submits to API and checks if valid
+        const dataForBackend = {
+            'height': values.height,
+            'weight': values.weight,
+            'smoker': (values.smoker === "True") ? 1 : 0,
+            'drinksPerWeek': values.drinksPerWeek,
+            'highRiskHours': values.highRiskHours,
+            'numberOfMedications': values.numberOfMedications,
+            'hoursOfSleep': values.hoursOfSleep,
+            'cholesterol': values.cholesterol,
+            'exercisePerWeek': values.exercisePerWeek,
+            'stepsPerDay': values.stepsPerDay,
+            'waistCircumference': values.waistCircumference
+        }
+
+        
+
+        emailAddress = getEmail();
+        sid = getSessionID();
+        try {
+            const response = await fetch('/api/customers?emailAddress=' + emailAddress + '&sid=' + sid,{
+                method: 'POST',
+                mode: 'cors', 
+                headers: {
+                    'Content-Type': 'application/json'
+                    
+                },
+                body: JSON.stringify(dataForBackend)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);	
+                }
+                return response.json();});
+            
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+
+    /*} else {
+        
+        alert('Invalid form data. Please check your inputs.');
+    }*/
+  };
 
   const onChange = (e) => {
     setValues({...values, [e.target.name]: e.target.value});
@@ -219,8 +274,8 @@ const FitnessForm = () =>
               class="submitInfo"
             >
               <option value="">Select option</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
+              <option value="Yes">True</option>
+              <option value="No">False</option>
             </select>
           </label>
           <button class="submitInfo"> Submit </button>

@@ -114,6 +114,7 @@ header .container {
   color: var(--lightTwo);
   margin-left: 4.5rem;
   display: inline-block;
+  width: 11vh;
   transition: 0.3s;
   font-family: "Outfit", Outfit;
 }
