@@ -9,7 +9,6 @@ let customerEmail = null;
 function SubmitData({email}) {
 
     const [values, setValues] = useState({
-        illnessType: 0,
         illnessMortalityRate: 0,
         healthScore: 0,
         currentWeight: 0,
@@ -59,7 +58,7 @@ function SubmitData({email}) {
             <form onSubmit={handleSubmit}>
                     <div class="form-group">
                         <label>Type of Illness</label>
-                        <input type="text" name="illnessType" value={values.illnessType} onChange={onChange} />
+                        <input type="text" name="illnessType"/>
                     </div>
                     <div class="form-group">
                     <label>Illness Mortality Rate (%)</label>
