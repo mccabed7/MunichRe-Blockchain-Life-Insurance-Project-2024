@@ -83,7 +83,7 @@ contract Insurance {
         uint256 newWeight,
         int256 newAge
     ) public returns (string memory) {
-        require(msg.sender == owner, "Only the contract owner can update the profile.");
+       
 
         // Update user's profile
         user.isSmoker = newSmokerStatus;
