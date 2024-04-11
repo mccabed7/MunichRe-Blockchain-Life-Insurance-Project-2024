@@ -1,8 +1,8 @@
 
 .light {
   --mainColor: #231445;
-  --hoverColor: #496acf;
-  --backgroundColor: rgb(145, 160, 236);
+  --hoverColor: #ae65d9;
+  --backgroundColor: rgb(218, 187, 247);
   --darkOne: #231445;
   --darkTwo: #231445;
   --lightOne: #190f52;
@@ -13,7 +13,7 @@
   --mainColor: #9191f9;
   --hoverColor: #6864e5;
   --backgroundColor: #130e34;
-  --darkOne: #f3f3f3;
+  --darkOne: #ffffff;
   --darkTwo: #6864e5;
   --lightOne: #ccc;
   --lightTwo: #e7e3e3;
@@ -108,13 +108,25 @@ header .container {
   display: flex;
   list-style: none;
   align-items: center;
+  font-weight: bold;
+}
+
+/* Adjust the space between the navigation links */
+.links ul li {
+  margin-right: 0.1rem; /* Adjust the margin-right as needed */
+}
+
+/* Ensure the list items do not break */
+.links ul li a {
+  white-space: nowrap; /* This will prevent the text from wrapping */
+  margin-left: 3rem;
 }
 
 .links a {
   color: var(--lightTwo);
   margin-left: 4.5rem;
   display: inline-block;
-  width: 11vh;
+  /* width: auto; */
   transition: 0.3s;
   font-family: "Outfit", Outfit;
 }
@@ -133,6 +145,11 @@ header .container {
   text-transform: capitalize;
   transition: 0.3s;
   font-family: "Outfit", Outfit;
+  width: auto;
+}
+
+.links a:not(.btn) {
+  width: auto; /* Added specificity so that this doesn't apply to elements with .btn class */
 }
 
 .btn:hover {
@@ -167,7 +184,7 @@ header .container {
   text-shadow: 1px 1px 1px rgba(48, 0, 100, 0.6);
   text-align: left;
   font-size: 1.6rem;
-  color: var(--mainColor);
+  color: var(--darkOne);
   text-transform: capitalize;
   line-height: 1.5;
   font-family: "Outfit", Outfit;

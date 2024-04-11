@@ -24,7 +24,7 @@ function LandingPage() {
 
   return (
   <div className='home'>
-    <div className={`big-wrapper ${darkMode ? 'dark' : 'light'}`}>
+    <div className={`big-wrapper ${darkMode ? 'light' : 'dark'}`}>
       <img src="./img/shape.png" alt="" className="shape" />
       <img src="./img/shape.png" alt="" className="shape2" />
 
@@ -75,7 +75,7 @@ function LandingPage() {
       <div className="bottom-area">
         <div className="container">
           <button className="toggle-btn">
-            <img src={darkMode ? sunIcon : moonIcon} alt={darkMode ? "Sun Icon" : "Moon Icon"} />
+            <img src={darkMode ? moonIcon : sunIcon} alt={darkMode ? "Moon Icon" : "Sun Icon"} />
           </button>
         </div>
       </div>

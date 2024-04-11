@@ -52,7 +52,7 @@ function AboutUs() {
         <div className="row">
           <div className="member">
             <img src={seb} alt="Seb" />
-            <h2>Seb</h2>
+            <h2>Sebastian</h2>
             <p>2nd Year Frontend</p>
           </div>
           <div className="member">
