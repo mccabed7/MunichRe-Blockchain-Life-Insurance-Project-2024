@@ -46,7 +46,7 @@ def get_customer(contract_address):
     return None # prevent creation of new tags
 
 def update_customer(contract_address, updatedValues):
-    return bc.send_data(contract_address, updatedValues)
+    return bc.send_data(contract_address, updatedValues).get('transactionHash', 'failed')
     # for key, value in updatedValues.items():                  # for each key, value pair in updatedValues
     #     update_item(id, key, value)
     # return db.access_Value(id, "all")

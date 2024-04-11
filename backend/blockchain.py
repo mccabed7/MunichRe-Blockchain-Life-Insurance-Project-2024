@@ -10,8 +10,8 @@ project_root_folder = os.path.dirname(os.path.dirname(__file__))
 
 # USER_CONTRACT_ABI = abi = [{ "inputs": [{ "internalType": "bool", "name": "newSmokerStatus", "type": "bool" }, { "internalType": "bool", "name": "newGymStatus", "type": "bool" }, { "internalType": "uint256", "name": "newWeight", "type": "uint256" }, { "internalType": "uint256", "name": "newAge", "type": "uint256" }], "name": "updateProfile", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getUserProfile", "outputs": [{ "components": [{ "internalType": "string", "name": "userName", "type": "string" }, { "internalType": "bool", "name": "isSmoker", "type": "bool" }, { "internalType": "bool", "name": "goesToGym", "type": "bool" }, { "internalType": "uint256", "name": "weight", "type": "uint256" }, { "internalType": "uint256", "name": "age", "type": "uint256" }, { "internalType": "uint256", "name": "payout", "type": "uint256" }, { "internalType": "uint256", "name": "premium", "type": "uint256" }, { "internalType": "uint256", "name": "contractCreationDate", "type": "uint256" }, { "internalType": "uint256", "name": "contractAnullment", "type": "uint256" }, { "internalType": "uint256", "name": "nextPaymentDate", "type": "uint256" }], "internalType": "struct Insurance.UserProfile", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "premiumPaid", "type": "bool" }], "name": "verifyPremiumPayment", "outputs": [], "stateMutability": "nonpayable", "type": "function" }]
 contract_path = project_root_folder + "/Blockchain/artifacts/contracts/userContract.sol/Insurance.json"
-
-USER_CONTRACT_ABI = json.load(open(contract_path))['abi']
+compiled_contract = json.load(open(contract_path))
+USER_CONTRACT_ABI = compiled_contract['abi']
 CONTRACT_GETUSERPROFILE = [x for x in USER_CONTRACT_ABI if x["type"]=="function"and x["name"]=="getUserProfile"][0]
 # print(CONTRACT_GETUSERPROFILE)
 VARIABLES_ENUM = [y["name"] for y in CONTRACT_GETUSERPROFILE["outputs"][0]["components"]]
@@ -19,7 +19,14 @@ VARIABLES_ENUM = [y["name"] for y in CONTRACT_GETUSERPROFILE["outputs"][0]["comp
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
-web3.eth._default_account = CREATOR_ADDRESS
+# web3.eth._default_account = CREATOR_ADDRESS
+web3.eth.account._parsePrivateKey(WALLET_PRIVATE)
+options = {
+    "chainId": 11155111,
+    "from": CREATOR_ADDRESS,
+    "gasPrice": web3.to_wei("1", "gwei"),# web3.parseUnits("1", "gwei"), # Set the gas price to 1 Gwei
+    "gas": 2000000 # Set the gas limit to 2 million
+}
 
 def check_connection():
   # Verify if the connection is successful
@@ -34,32 +41,50 @@ def check_connection():
   
 # returns length of list sent to blockchain
 def send_data(contract_address, data):
-    # nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
+    nonce = web3.eth.get_transaction_count(CREATOR_ADDRESS)
 
     # Then use the parsed ABI to create the contract instance
     contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
-    
+    function_args = prepare_kargs(data)
+    try:
+        print(function_args)
+        options["nonce"] = nonce
+        tx = contract.functions.updateEvent(function_args, len(function_args)).build_transaction(options) # call(options)
+
+        signed = web3.eth.account.sign_transaction(tx, private_key=WALLET_PRIVATE)
+        tx_hash = web3.eth.send_raw_transaction(signed.rawTransaction)
+        return web3.eth.wait_for_transaction_receipt(tx_hash)
+    except Exception as e:
+        return (f"Error calling function: {e}")
+     # len(function_args)/2
+
+def prepare_kargs(data):
     function_args = []
+    # count = 0
     for x in data:
         try:
             function_args.append(VARIABLES_ENUM.index(x))
             function_args.append(int(data[x]))
+            # count += 1
         except ValueError:
            pass
-    
-    try:
-        return contract.functions.updateEvent(function_args, len(function_args)).call())
-    except Exception as e:
-        return (f"Error calling function: {e}")
-     # len(function_args)/2
+    # for x in range(count, len(VARIABLES_ENUM)):
+    #    function_args.append(0)
+    #    function_args.append(0)
+    return function_args
 
 def deploy():
     # requires hardhat installed, `npm install hardhat`
     # and existing compiled contract (do this with `npx hardhat compile`)
 
+    # contract = web3.eth.contract(abi=USER_CONTRACT_ABI, bytecode=bytecode)
+    # print(contract.address)
+    # tx_hash = contract.constructor(False, True, 75, 34, 75000, 200, 365).transact()
+    # print(tx_hash)
     result = sp.run(args=["npx", "hardhat", "run", "scripts/deploy.js", "--network", "sepolia"], cwd=project_root_folder+"/Blockchain", capture_output=True, text=True)
     print(result.stderr)
     cont_addr = result.stdout.removeprefix("Contract Deployed to Address: ")
+    # tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
     return cont_addr
 
 def list_abi_functions():
@@ -117,13 +142,23 @@ def get_contract_events(contract_address):
     print(risk_timeline)
     return risk_timeline
 
+# def call_func(contract_address):
+#    contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
+   
+#    return contract.functions.setNewWeight(10).call()
+
 if __name__=="__main__":
     # get_contract_abi()
     
     # example()
     # list_abi_functions()
-    print(get_contract_details("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1"))
-    get_contract_events("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1")
+    # print(get_contract_details("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534"))
+    # get_contract_events("0x26404cd6030d60e60Bd03B118ee88e52cb652F69")
     # print(deploy())
-    print(send_data("0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1", {"weight":80}))
+    data = {"weight":80, "isSmoker":False, "age":"35", "hoursOfSleep":4}
+    # print(data)
+    # print(call_func("0x26404cd6030d60e60Bd03B118ee88e52cb652F69"))
+    print(send_data("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534", data))
+    # print(get_contract_details("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534"))
+    # get_contract_events("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534")
     pass
