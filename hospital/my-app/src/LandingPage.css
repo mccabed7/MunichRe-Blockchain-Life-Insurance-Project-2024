@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Pattaya&display=swap');
+
+
+.landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 5rem;
+    margin-top: 3rem;
+}
+
+.column {
+    transform: translate(-10%, 0%);
+}
+
+.msg {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-left: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.slogan {
+    font-family: 'Pattaya', sans-serif;
+    font-size: 3rem;
+    text-align: left;
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.hospital {
+    width: 40rem;
+    height: 30rem;
+    display: inline-block;
+    margin-right: 0.2rem;
+    transform: translate(5%);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}

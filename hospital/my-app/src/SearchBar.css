@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+
+.search-bar {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    z-index: 5;
+    width: 30rem;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center; /* Aligns children (forms) at the start of the container */
+    align-items: center; /* Aligns children at the start, so they are at the same level */
+    width: 100%;
+    gap: 5rem; /* Space between form elements */
+}
+
+.search-form {
+    font-family: PT Sans, sans-serif;
+    font-size: 24px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    backdrop-filter: blur(20px);
+    padding: 2%; /* reduced padding */
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(3, 3, 3, 0.5);
+    z-index: 5;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    /* transform: translate(10%); */
+}
+
+.search-form:hover {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9); /* increased shadow intensity */
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+.search-input {
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+.search-input:hover {
+    border-color: rgb(50, 48, 48);
+    border-style: solid;
+}
+
+.search-label {
+    font-size: 26px;
+    font-family: PT Sans, sans-serif;
+    font-weight: bold;
+    margin-bottom: 1rem; /* Space between label and input */
+}
+
+.search {
+    width: 14.5rem; /* adjust for padding */
+    height: auto;
+    padding: 5px;
+    background-color: rgb(66, 63, 70);
+    /* box-shadow: 0 0 50px rgba(0, 0, 0, 0.6); reduced intensity */
+    color: white;
+    border-radius: 10px;
+    font-family: PT Sans, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 15px;
+    border-style: none;
+}
+
+.search:hover {
+    background-color: gray;
+    border-color: white;
+    border-style: solid;
+    /*box-shadow: 0 0 50px rgba(0, 0, 0, 0.8); /* increased intensity */
+}

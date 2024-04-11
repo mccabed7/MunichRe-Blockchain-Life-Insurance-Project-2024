@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+
+.submit-data {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    width: 30rem;
+}
+
+form {
+    font-family: PT Sans, sans-serif;
+    font-size: 18px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh; /* adjusted from fixed height to accommodate content */
+    width: 100%;
+    backdrop-filter: blur(20px);
+    padding: 2%; /* reduced padding */
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(3, 3, 3, 0.5); /* adjusted shadow for consistency */
+    z-index: 5;
+    margin-bottom: 5rem;
+    margin-top: 5rem;
+}
+
+form:hover {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9); /* increased shadow intensity */
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+input {
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select:hover {
+    border-color: rgb(50, 48, 48);
+    border-style: solid;
+}
+
+input:hover {
+    border-color: rgb(50, 48, 48);
+    border-style: solid;
+}
+
+/* Slider container */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* The track of the slider */
+input[type=range] {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 97%; /* Full-width */
+    height: 10px; /* Specified height */
+    background: #d4d4d4; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (cross-browser) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    border-radius: 5px; /* Rounded corners */
+    margin: 10px 0;
+}
+
+/* Mouse-over effect */
+input[type=range]:hover {
+    opacity: 1; /* Fully opaque on hover */
+}
+
+/* The slider handle (thumb) */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Width of the handle */
+    height: 25px; /* Height of the handle */
+    background: #000000; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 50%; /* Circular shape */
+    border: 1px solid #ffffff; /* White border */
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 25px; /* Width of the handle */
+    height: 25px; /* Height of the handle */
+    background: #000000; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 50%; /* Circular shape */
+    border: 1px solid #ffffff; /* White border */
+}
+
+/* Make the thumb larger and colored on focus */
+input[type=range]:focus::-webkit-slider-thumb {
+    background: #000000;
+}
+
+input[type=range]:focus::-moz-range-thumb {
+    background: #000000;
+}
+
+
+/* Replaced column with form-group for each label-input pair */
+.form-group {
+    text-align: left; /* Align text to the left */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    margin-bottom: 1rem; /* Space between each form group */
+    width: 70%; /* Full width of form */
+    font-size: 18px;
+}
+
+label {
+    font-size: 20px;
+    font-family: PT Sans, sans-serif;
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Space between label and input */
+}
+
+button {
+    width: 70%; /* adjust for padding */
+    height: auto;
+    padding: 5px;
+    background-color: rgb(66, 63, 70);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.6); /* reduced intensity */
+    color: white;
+    border-radius: 10px;
+    font-family: PT Sans, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-style: none;
+}
+
+button:hover {
+    background-color: gray;
+    border-color: white;
+    border-style: solid;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8); /* increased intensity */
+}
+
+h1 {
+    color: rgb(0, 0, 0);
+    text-align: center;
+
+}
