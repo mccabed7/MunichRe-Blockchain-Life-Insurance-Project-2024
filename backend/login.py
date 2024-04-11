@@ -7,8 +7,8 @@ sessions = {
 
 # key value is email
 # contains dictonary with 'password' and 'data' (which containes contract address, admin or third-party)
-Users = {
-    'jameshumphrey@gmail.com' : {'password' : '6795', 'data' : '0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1'}, 
+Users = {# 0x26a3dCa9a80B2aE0B72c8fB0101F2d8c03480DB1
+    'jameshumphrey@gmail.com' : {'password' : '6795', 'data' : '0x26404cd6030d60e60Bd03B118ee88e52cb652F69'}, 
     'emmapart@gmail.com' : {'password' : 'password123', 'data' : 'admin'},
     'third@party.com' : {'password' : 'asdfghjk', 'data' : 'third-party'}
 }

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNDEFINED
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.18;
 
 contract Insurance {
     struct UserInfo {
@@ -53,6 +53,7 @@ contract Insurance {
     }
     address private owner;
     UserInfo user;
+    // 38 is number variables in struct/enum * 2
     bool userPaymentFailure = false;
     //Logs event of risk after recalculation
     event RiskUpdated(uint256 newRisk);
@@ -122,10 +123,10 @@ contract Insurance {
         updateProfile(user.isSmoker, user.goesToGym, user.weight, user.age);
     }
 
-    function updateEvent(uint256[] calldata kargs, uint nargs) public returns (string memory) {
+    function updateEvent(uint256 nargs, uint256[38] calldata kargs) public returns (string memory) {
         require(msg.sender == owner, "Only the contract owner can update the profile.");
 
-        for (uint i = 0; i<nargs ; i++) {
+        for (uint i = 0; i<nargs; i++) {
             if (varId(kargs[i]) == varId.isSmoker) {
                 user.isSmoker = (kargs[++i] == 1? true:false);
             }

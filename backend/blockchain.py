@@ -3,7 +3,7 @@ import os
 import subprocess as sp
 import json
 import requests
-import time
+# import time
 from secret import * #ALCHEMY_API_KEY, ETHERSCAN_API_KEY, CREATOR_ADDRESS # , WALLET_PRIVATE_KEY
 # API_KEY = os.environ['API_KEY']
 project_root_folder = os.path.dirname(os.path.dirname(__file__))
@@ -19,13 +19,14 @@ VARIABLES_ENUM = [y["name"] for y in CONTRACT_GETUSERPROFILE["outputs"][0]["comp
 # Alchemy API URL
 alchemy_url = f"https://eth-sepolia.g.alchemy.com/v2/{ALCHEMY_API_KEY}"
 web3 = Web3(Web3.HTTPProvider(alchemy_url))
-# web3.eth._default_account = CREATOR_ADDRESS
-web3.eth.account._parsePrivateKey(WALLET_PRIVATE)
+web3.eth._default_account = CREATOR_ADDRESS
+# web3.eth.account.(WALLET_PRIVATE)
+
 options = {
     "chainId": 11155111,
-    "from": CREATOR_ADDRESS,
-    "gasPrice": web3.to_wei("1", "gwei"),# web3.parseUnits("1", "gwei"), # Set the gas price to 1 Gwei
-    "gas": 2000000 # Set the gas limit to 2 million
+    # "from": CREATOR_ADDRESS,
+    "gasPrice": int(web3.to_wei("50", "gwei")*1.1),# web3.parseUnits("1", "gwei"), # Set the gas price to 1 Gwei
+    "gas": 200000, # Set the gas limit to 200 thousand
 }
 
 def check_connection():
@@ -45,11 +46,11 @@ def send_data(contract_address, data):
 
     # Then use the parsed ABI to create the contract instance
     contract = web3.eth.contract(address=contract_address, abi=USER_CONTRACT_ABI)
-    function_args = prepare_kargs(data)
+    nargs, function_args = prepare_kargs(data)
     try:
         print(function_args)
         options["nonce"] = nonce
-        tx = contract.functions.updateEvent(function_args, len(function_args)).build_transaction(options) # call(options)
+        tx = contract.functions.updateEvent(nargs, function_args).build_transaction(options) # call(options)
 
         signed = web3.eth.account.sign_transaction(tx, private_key=WALLET_PRIVATE)
         tx_hash = web3.eth.send_raw_transaction(signed.rawTransaction)
@@ -60,18 +61,18 @@ def send_data(contract_address, data):
 
 def prepare_kargs(data):
     function_args = []
-    # count = 0
+    count = 0
     for x in data:
         try:
             function_args.append(VARIABLES_ENUM.index(x))
             function_args.append(int(data[x]))
-            # count += 1
+            count += 1
         except ValueError:
            pass
-    # for x in range(count, len(VARIABLES_ENUM)):
-    #    function_args.append(0)
-    #    function_args.append(0)
-    return function_args
+    for x in range(count, len(VARIABLES_ENUM)):
+       function_args.append(-1)
+       function_args.append(-1)
+    return int(count*2), function_args
 
 def deploy():
     # requires hardhat installed, `npm install hardhat`
@@ -147,18 +148,20 @@ def get_contract_events(contract_address):
    
 #    return contract.functions.setNewWeight(10).call()
 
+TEST_ADDRESS = "0x26404cd6030d60e60Bd03B118ee88e52cb652F69"# 0xC51AbA9Fd0051308AB2E8Fc5E4B6cA862775C0dD"
+
 if __name__=="__main__":
     # get_contract_abi()
     
     # example()
     # list_abi_functions()
-    # print(get_contract_details("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534"))
-    # get_contract_events("0x26404cd6030d60e60Bd03B118ee88e52cb652F69")
-    # print(deploy())
+    # print(get_contract_details(TEST_ADDRESS))
+    # get_contract_events(TEST_ADDRESS)
+    print(deploy())
     data = {"weight":80, "isSmoker":False, "age":"35", "hoursOfSleep":4}
     # print(data)
     # print(call_func("0x26404cd6030d60e60Bd03B118ee88e52cb652F69"))
-    print(send_data("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534", data))
-    # print(get_contract_details("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534"))
+    # print(send_data(TEST_ADDRESS, data))
+    # print(get_contract_details(TEST_ADDRESS))
     # get_contract_events("0xf85910df64b74b7A4A3f8Af40828FdaFE781d534")
     pass
