@@ -50,17 +50,17 @@ function SubmitInfo() {
     //if (isFormValid()) {
         // Method which submits to API and checks if valid
         const dataForBackend = {
-            'height': values.height,
-            'weight': values.weight,
-            'smoker': (values.smoker === "True") ? 1 : 0,
-            'drinksPerWeek': values.drinksPerWeek,
-            'highRiskHours': values.highRiskHours,
-            'numberOfMedications': values.numberOfMedications,
-            'hoursOfSleep': values.hoursOfSleep,
-            'cholesterol': values.cholesterol,
-            'exercisePerWeek': values.exercisePerWeek,
-            'stepsPerDay': values.stepsPerDay,
-            'waistCircumference': values.waistCircumference
+            'height': inputs.height,
+            'weight': inputs.weight,
+            'isSmoker': (inputs.smoker === "True") ? 1 : 0,
+            'drinksPerWeek': inputs.drinksPerWeek,
+            'highRiskHours': inputs.highRiskHours,
+            'numberOfMedications': inputs.numberOfMedications,
+            'hoursOfSleep': inputs.hoursOfSleep,
+            'cholesterol': inputs.cholesterol,
+            'exercisePerWeek': inputs.exercisePerWeek,
+            'stepsPerDay': inputs.stepsPerDay,
+            'waistCircumference': inputs.waistCircumference
         }
 
         

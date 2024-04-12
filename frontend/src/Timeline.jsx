@@ -98,9 +98,9 @@ const Timeline = () =>{
       fetchData();
     }, []);
 
-    const formattedTimelinePoints = timelinePoints.map((point, index) => {
+    const formattedTimelinePoints = timelinePoints.reverse().map((point, index) => {
       // Assuming the first element of each point is a timestamp or an incident ID
-      const incidentNo = `Incident ${index + 1}`;
+      const incidentNo = `Incident ${timelinePoints.length - index}`;
       // The second element is the risk score
       const riskScore = point[1];
     
@@ -119,7 +119,7 @@ const Timeline = () =>{
         loader={<div>Loading Chart</div>}
         data={[
           ['Incident No', 'Risk Score'],
-          ...formattedTimelinePoints,
+          ...formattedTimelinePoints.reverse(),
         ]}
         options={{
           title: 'Risk Timeline',
