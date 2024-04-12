@@ -1,0 +1,18 @@
+.dashboard {
+    display: flex;
+    height: 100vh;
+    background: rgb(0,0,0);
+    background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(66,35,152,1) 47%, rgba(143,109,205,1) 83%);
+  }
+  
+  .dashboard-panel {
+    flex-grow: 1;
+    width: 100vh;
+    marginLeft: '20px';
+    marginTop: '20px';
+    marginRight: '20px';
+    padding: '20px';
+    background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(66,35,152,1) 47%, rgba(143,109,205,1) 83%);
+    padding: 20px;
+    overflow-y: auto;
+  }

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.registrationInput {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+input {
+    font-family: Poppins, sans-serif;
+    padding: 15px;
+    margin: 10px 0px;
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: white;
+}
+
+input:invalid[focused="true"] ~ span {
+    display: block;
+}
+
+label {
+    font-size: 14px;
+    color: white;
+}
+
+span {
+    font-size: 11px;
+    padding: 1px;
+    color: red;
+    display: none;
+}
+

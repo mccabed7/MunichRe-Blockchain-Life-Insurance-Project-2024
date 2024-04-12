@@ -1,0 +1,11 @@
+.panel{
+    height: 100%;
+    width: 100%;
+    padding: 8px;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.3)
+    );
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgb(255, 255, 255);
+}

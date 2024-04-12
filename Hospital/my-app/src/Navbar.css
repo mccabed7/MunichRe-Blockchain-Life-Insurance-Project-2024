@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+
+.icon {
+    font-size: 50px;
+    padding: 0.5rem;
+}
+
+.hospital-name {
+    font-family: PT Sans, sans-serif;
+    font-size: 1.5rem;
+    position: relative;
+    transform: translate(5%, -10%);
+}
+
+.nav-header {
+    display: flex;
+    justify-content: left;
+    padding: 0.6rem;
+    max-width: 100%;
+    background-color: #f8f9fa;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.search-btn {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 1rem;
+    /* margin-left: 58rem; */
+    cursor: pointer;
+    width: 10rem;
+    transform: translate(535%, -10%);
+}
